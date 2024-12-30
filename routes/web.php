@@ -16,5 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('landing-pages.view.index');
 });
+Route::get('/login', function () {
+    return view('auth.sign-in');
+});
+Route::get('/dashboard', function () {
+    return view('dashboard.views.index');
+});
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
