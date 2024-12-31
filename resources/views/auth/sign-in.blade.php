@@ -18,6 +18,20 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('dashboard-assets/css/argon-dashboard.css') }}" rel="stylesheet" />
+    <style>
+        .alert-danger {
+            --bs-alert-bg: #dc3545;
+            /* Atur background alert */
+            --bs-alert-color: #fff;
+            /* Atur warna text alert */
+        }
+
+        .alert-danger .btn-close {
+            --bs-btn-close-color: #000 !important;
+            opacity: 1 !important;
+            z-index: 999 !important;
+        }
+    </style>
 </head>
 
 <body class="">
@@ -33,31 +47,32 @@
                                     <p class="mb-0">Enter your email and password to sign in</p>
                                 </div>
                                 <div class="card-body">
-                                    <form role="form">
+                                    @if (Session::has('error'))
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <div>{{ session('error') }}</div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                        </div>
+                                    @endif
+                                    <form role="form" method="POST" action="{{ route('post-login') }}">
+                                        @csrf
                                         <div class="mb-3">
                                             <input type="email" class="form-control form-control-lg"
-                                                placeholder="Email" aria-label="Email">
+                                                placeholder="Email" aria-label="Email" name="email" required>
                                         </div>
                                         <div class="mb-3">
-                                            <input type="email" class="form-control form-control-lg"
-                                                placeholder="Password" aria-label="Password">
+                                            <input type="password" class="form-control form-control-lg"
+                                                placeholder="Password" aria-label="Password" name="password" required>
                                         </div>
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" id="rememberMe">
                                             <label class="form-check-label" for="rememberMe">Remember me</label>
                                         </div>
                                         <div class="text-center">
-                                            <button type="button"
+                                            <button type="submit"
                                                 class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Sign in</button>
                                         </div>
                                     </form>
-                                </div>
-                                <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                                    <p class="mb-4 text-sm mx-auto">
-                                        Don't have an account?
-                                        <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Sign
-                                            up</a>
-                                    </p>
                                 </div>
                             </div>
                         </div>

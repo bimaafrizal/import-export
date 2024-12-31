@@ -80,13 +80,16 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link " href="../pages/sign-up.html">
-                    <div
-                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-collection text-dark text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Sign Up</span>
-                </a>
+                <form action="{{route('logout')}}" method="POST">
+                    @csrf
+                    <button class="nav-link " type="submit">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-collection text-dark text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Logout</span>
+                    </button>
+                </form>
             </li>
         </ul>
     </div>
