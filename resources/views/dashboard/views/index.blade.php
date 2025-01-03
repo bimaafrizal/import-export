@@ -1,4 +1,4 @@
-@extends('dashboard2.layout.app')
+@extends('dashboard.layout.app')
 
 @section('page-name')
     Dashboard

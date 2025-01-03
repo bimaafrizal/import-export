@@ -35,7 +35,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', function () {
-            return view('dashboard2.views.index');
+            return view('dashboard.views.index');
         })->name('dashboard');
         Route::prefix('/manage-admin')->group(function () {
             Route::get('/', [MangaementAdminController::class, 'index'])->name('management-admin.index');

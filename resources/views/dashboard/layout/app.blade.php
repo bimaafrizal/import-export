@@ -35,9 +35,9 @@
 </head>
 
 <body>
-    @include('dashboard2.components.header')
+    @include('dashboard.components.header')
 
-    @include('dashboard2.components.sidebar')
+    @include('dashboard.components.sidebar')
 
 
     <main id="main" class="main">
@@ -56,7 +56,7 @@
 
     </main><!-- End #main -->
 
-    @include('dashboard2.components.footer')
+    @include('dashboard.components.footer')
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
