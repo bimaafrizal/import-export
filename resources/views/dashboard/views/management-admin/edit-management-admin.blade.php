@@ -10,7 +10,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Create Admin</h5>
+                        <h5 class="card-title">Edit Admin</h5>
                         {{-- show errror --}}
                         @if ($errors->any())
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -23,39 +23,40 @@
                                 @endforeach
                             </div>
                         @endif
-                        <form method="POST" action="{{ route('management-admin.store') }}">
+                        <form method="POST" action="{{ route('management-admin.update', encrypt($user->id)) }}">
+                            @method('PATCH')
                             @csrf
                             <div class="row mb-3">
                                 <label for="inputText" class="col-sm-12 col-form-label">Name</label>
                                 <div class="col-sm-12">
                                     <input type="text" class="form-control" name="name" required
-                                        value="{{ old('name') }}">
+                                        value="{{ old('name', $user->name) }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputEmail" class="col-sm-12 col-form-label">Email</label>
                                 <div class="col-sm-12">
                                     <input type="email" class="form-control" name="email" required
-                                        value="{{ old('email') }}">
+                                        value="{{ old('email', $user->email) }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputNumber" class="col-sm-12 col-form-label">Phone Number</label>
                                 <div class="col-sm-12">
                                     <input type="number" class="form-control" name="phone_number"
-                                        value="{{ old('phone_number') }}">
+                                        value="{{ old('phone_number', $user->phone_number) }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputPassword" class="col-sm-12 col-form-label">Password</label>
                                 <div class="col-sm-12">
-                                    <input type="password" class="form-control" name="password" required>
+                                    <input type="password" class="form-control" name="password">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="confirmPassword" class="col-sm-12 col-form-label">Confirm Password</label>
                                 <div class="col-sm-12">
-                                    <input type="password" class="form-control" name="password_confirmation" required>
+                                    <input type="password" class="form-control" name="password_confirmation">
                                 </div>
                             </div>
                             <div class="row mb-3">

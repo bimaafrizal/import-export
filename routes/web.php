@@ -42,8 +42,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/create', [MangaementAdminController::class, 'create'])->name('management-admin.create');
             Route::post('/store', [MangaementAdminController::class, 'store'])->name('management-admin.store');
             Route::get('/edit/{id}', [MangaementAdminController::class, 'edit'])->name('management-admin.edit');
-            Route::post('/update/{id}', [MangaementAdminController::class, 'update'])->name('management-admin.update');
-            Route::get('/delete/{id}', [MangaementAdminController::class, 'delete'])->name('management-admin.delete');
+            Route::patch('/update/{id}', [MangaementAdminController::class, 'update'])->name('management-admin.update');
+            Route::delete('/delete/{id}', [MangaementAdminController::class, 'destroy'])->name('management-admin.delete');
         });
     });
 });

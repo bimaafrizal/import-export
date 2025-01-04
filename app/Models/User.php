@@ -39,7 +39,18 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function role(){
+    public function role()
+    {
         return $this->belongsTo(Role::class);
+    }
+
+    protected $appends = ['encrypted_id'];
+
+
+    public function getEncryptedIdAttribute()
+
+    {
+
+        return encrypt($this->id);
     }
 }
