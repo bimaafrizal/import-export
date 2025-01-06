@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\LandingPageSettingController;
 use App\Http\Controllers\MangaementAdminController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,9 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 //landing page
-Route::get('/', function () {
-    return view('landing-pages.view.index');
-});
+Route::get('/', [LandingPageController::class, 'index'])->name('index');
 
 //auth routes
 Route::get('/login', function () {
@@ -44,6 +44,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/edit/{id}', [MangaementAdminController::class, 'edit'])->name('management-admin.edit');
             Route::patch('/update/{id}', [MangaementAdminController::class, 'update'])->name('management-admin.update');
             Route::delete('/delete/{id}', [MangaementAdminController::class, 'destroy'])->name('management-admin.delete');
+        });
+
+        Route::prefix('landing-page-settings')->group(function () {
+            Route::get('/', [LandingPageSettingController::class, 'index'])->name('landing-page-settings.index');
+            Route::patch('/update-home', [LandingPageSettingController::class, 'updateHome'])->name('landing-page-settings.update-home');
         });
     });
 });

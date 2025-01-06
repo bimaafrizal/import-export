@@ -17,6 +17,24 @@
               </a>
           </li>
           <li class="nav-item">
+              <a class="nav-link {{ request()->routeIs('landing-page-settings.*') ? '' : 'collapsed' }}" href="{{ route('landing-page-settings.index') }}">
+                  <i class="bi bi-archive"></i>
+                  <span>Setting Landing page</span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link {{ request()->routeIs('kategori-blog.*') ? '' : 'collapsed' }}" href="{{ route('management-admin.index') }}">
+                  <i class="bi bi-person-fill-gear"></i>
+                  <span>Kategori Blog</span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link {{ request()->routeIs('blog.*') ? '' : 'collapsed' }}" href="{{ route('management-admin.index') }}">
+                  <i class="bi bi-newspaper"></i>
+                  <span>Blog</span>
+              </a>
+          </li>
+          <li class="nav-item">
               <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
                   <i class="bi bi-menu-button-wide"></i><span>Components</span><i
                       class="bi bi-chevron-down ms-auto"></i>
