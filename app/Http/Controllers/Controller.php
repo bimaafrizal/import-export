@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
@@ -38,5 +39,43 @@ class Controller extends BaseController
             'name' => $name,
             'path' => '/images/landing-page/' . $name,
         ];
+    }
+
+    public function saveUploadImage($crop_x, $crop_y, $crop_width, $crop_height, $requestImage, $imageId, $type): int
+    {
+        $pathOldImage = null;
+
+        $oldImage = Image::where('id', $imageId)->first();
+        if (!empty($oldImage)) {
+            $pathOldImage = $oldImage->path;
+        }
+
+        $crop = [
+            'x' => $crop_x,
+            'y' => $crop_y,
+            'width' => $crop_width,
+            'height' => $crop_height,
+        ];
+
+        $uploadImage = $this->uploadImage($pathOldImage, $requestImage, $crop);
+        $path = $uploadImage['path'];
+        $imageName = $uploadImage['name'];
+
+        if (empty($imageId)) {
+            //create new image
+            $newImage = Image::create([
+                'path' => $path,
+                'name' => $imageName,
+                'type' => $type
+            ]);
+            $imageId = $newImage->id;
+        } else {
+            Image::where('id', $imageId)->update([
+                'name' => $imageName,
+                'path' => $path,
+            ]);
+        }
+
+        return $imageId;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LandingPage;
 use App\Http\Requests\StoreLandingPageRequest;
 use App\Http\Requests\UpdateLandingPageRequest;
+use App\Models\AboutUs;
 use App\Models\Image;
 use Intervention\Image\Laravel\Facades\Image as InterventionImage;
 
@@ -18,14 +19,32 @@ class LandingPageController extends Controller
         $landingPage = LandingPage::where('id', 1)->first()->toArray();
         $landingPage['hero_image'] = null;
         if (!empty($landingPage['image_id'])) {
-            $image = Image::where('id', $landingPage['image_id'])->first();
-            //check path image to check the file exists
+            $imageId = [$landingPage['image_id']];
+        }
+
+        $aboutUs = AboutUs::where('id', 1)->first();
+        if (!empty($aboutUs)) {
+            $aboutUs = $aboutUs->toArray();
+            if (!empty($aboutUs['image_id'])) {
+                $imageId[] = $aboutUs['image_id'];
+            }
+
+            $aboutUs['content'] = preg_replace('/\\r\\n|\\r|\\n/', "\r\n", $aboutUs['content']);
+            $aboutUs['content'] = nl2br($aboutUs['content']);
+        }
+        $images = Image::whereIn('id', $imageId)->get();
+        // check path image to check the file exists
+        foreach ($images as $image) {
             if (file_exists(public_path($image->path))) {
-                $landingPage['hero_image'] = $image->path;
+                if($image->type == 'hero') {
+                    $landingPage['hero_image'] = $image->path;
+                } else if($image->type == 'about_us') {
+                    $aboutUs['image'] = $image->path;
+                }
             }
         }
 
-        return view('landing-pages.view.index', compact('landingPage'));
+        return view('landing-pages.view.index', compact('landingPage', 'aboutUs'));
     }
 
     /**

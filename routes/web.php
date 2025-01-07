@@ -49,6 +49,8 @@ Route::middleware('auth')->group(function () {
         Route::prefix('landing-page-settings')->group(function () {
             Route::get('/', [LandingPageSettingController::class, 'index'])->name('landing-page-settings.index');
             Route::patch('/update-home', [LandingPageSettingController::class, 'updateHome'])->name('landing-page-settings.update-home');
+            Route::get('/about', [LandingPageSettingController::class, 'aboutUs'])->name('landing-page-settings.about-us');
+            Route::patch('/update-about', [LandingPageSettingController::class, 'updateAboutUs'])->name('landing-page-settings.update-about');
         });
     });
 });

@@ -10,11 +10,11 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Setting Landing Page</h5>
+                        <h5 class="card-title">Setting Landing Page About Us</h5>
                         <div class="row">
                             <div class="col-12">
                                 <div class="responsive-iframe">
-                                    <iframe src="{{env('APP_URL')}}#home" scrolling="no" frameborder="0"></iframe>
+                                    <iframe src="{{ env('APP_URL') }}#about" frameborder="0"></iframe>
                                 </div>
                             </div>
                         </div>
@@ -44,8 +44,7 @@
                                 @endforeach
                             </div>
                         @endif
-
-                        <form action="{{ route('landing-page-settings.update-home') }}" method="POST"
+                        <form action="{{ route('landing-page-settings.update-about') }}" method="POST"
                             enctype="multipart/form-data">
                             @method('PATCH')
                             @csrf
@@ -53,24 +52,17 @@
                                 <label for="inputText" class="col-sm-12 col-form-label">Title</label>
                                 <div class="col-sm-12">
                                     <input type="text" class="form-control" name="title" required
-                                        value="{{ old('title', $landingPageSetting->title) }}">
+                                        value="{{ old('title', $aboutUs ? $aboutUs->title : '') }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputText" class="col-sm-12 col-form-label">Sub Title</label>
+                                <label for="inputText" class="col-sm-12 col-form-label">Body</label>
                                 <div class="col-sm-12">
-                                    <input type="text" class="form-control" name="sub_title" required
-                                        value="{{ old('sub_title', $landingPageSetting->sub_title) }}">
+                                    <textarea class="form-control" style="height: 100px" name="content">{{ old('content', $aboutUs ? $aboutUs->content : '') }}</textarea>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputText" class="col-sm-12 col-form-label">Logo</label>
-                                <div class="col-sm-12">
-                                    <input type="file" class="form-control" name="logo">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="image">Gambar:</label>
+                                <label for="image">Gambar: </label>
                                 <div class="col-sm-12">
                                     <input type="file" name="image" id="image" class="form-control">
                                 </div>
@@ -120,7 +112,7 @@
                     $image.attr('src', url);
                     $image.show();
                     cropper = new Cropper($image[0], {
-                        aspectRatio: 16 / 9,
+                        aspectRatio: 4 / 3,
                         viewMode: 1,
                         crop(event) {
                             $('#crop_x').val(Math.round(event.detail.x));
