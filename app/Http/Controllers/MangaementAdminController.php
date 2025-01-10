@@ -21,7 +21,6 @@ class MangaementAdminController extends Controller
             $user->encrypted_id = encrypt($user->id);
             return $user;
         });
-        // dd($users);
         return view('dashboard.views.management-admin.index-management-admin', compact('users'));
     }
 

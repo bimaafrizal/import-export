@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use App\Models\ProductImage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
@@ -41,7 +42,7 @@ class Controller extends BaseController
         ];
     }
 
-    public function saveUploadImage($crop_x, $crop_y, $crop_width, $crop_height, $requestImage, $imageId, $type): int
+    public function saveUploadImage($crop_x, $crop_y, $crop_width, $crop_height, $requestImage, $imageId, $type, $decription = null, $typeUpload = []): int
     {
         $pathOldImage = null;
 
@@ -66,16 +67,43 @@ class Controller extends BaseController
             $newImage = Image::create([
                 'path' => $path,
                 'name' => $imageName,
-                'type' => $type
+                'type' => $type,
+                'description' => $decription,
             ]);
             $imageId = $newImage->id;
+
+            //save product image
+            if (!empty($typeUpload) && $typeUpload['type'] = 'product') {
+                ProductImage::create([
+                    'product_id' => $typeUpload['product_id'],
+                    'image_id' => $imageId,
+                ]);
+            }
         } else {
             Image::where('id', $imageId)->update([
                 'name' => $imageName,
                 'path' => $path,
+                'description' => $decription,
             ]);
         }
-
         return $imageId;
+    }
+
+    public function deleteImage($id)
+    {
+        $image = Image::find($id);
+        if (!$image) {
+            throw new \Exception('Image not found');
+        }
+        ProductImage::where('image_id', $id)->delete();
+        Image::where('id', $id)->get();
+
+        if (file_exists(public_path($image->path))) {
+            unlink(public_path($image->path));
+        }
+
+        Image::where('id', $id)->delete();
+
+        return $id;
     }
 }

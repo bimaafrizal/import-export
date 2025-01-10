@@ -7,6 +7,7 @@ use App\Http\Requests\StoreLandingPageRequest;
 use App\Http\Requests\UpdateLandingPageRequest;
 use App\Models\AboutUs;
 use App\Models\Image;
+use App\Models\Product;
 use Intervention\Image\Laravel\Facades\Image as InterventionImage;
 
 class LandingPageController extends Controller
@@ -32,6 +33,13 @@ class LandingPageController extends Controller
             $aboutUs['content'] = preg_replace('/\\r\\n|\\r|\\n/', "\r\n", $aboutUs['content']);
             $aboutUs['content'] = nl2br($aboutUs['content']);
         }
+        $products = Product::with('productImages')->get();
+        foreach ($products as $product) {
+            foreach ($product->productImages as $productImage) {
+                $imageId[] = $productImage->image_id;
+            }
+        }
+
         $images = Image::whereIn('id', $imageId)->get();
         // check path image to check the file exists
         foreach ($images as $image) {
@@ -40,11 +48,21 @@ class LandingPageController extends Controller
                     $landingPage['hero_image'] = $image->path;
                 } else if($image->type == 'about_us') {
                     $aboutUs['image'] = $image->path;
+                } else if($image->type == 'product') {
+                    foreach ($products as $product) {
+                        foreach ($product->productImages as $productImage) {
+                            if($productImage->image_id == $image->id) {
+                                $productImage->image = $image->path;
+                                $productImage->description = preg_replace('/\\r\\n|\\r|\\n/', "\r\n", $image->description);
+                                $productImage->description = nl2br($productImage->description);
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        return view('landing-pages.view.index', compact('landingPage', 'aboutUs'));
+        return view('landing-pages.view.index', compact('landingPage', 'aboutUs', 'products'));
     }
 
     /**

@@ -32,6 +32,11 @@
                           <i class="bi bi-circle"></i><span>About Us</span>
                       </a>
                   </li>
+                  <li>
+                      <a href="{{ route('landing-page-settings.product') }}" class="{{ request()->routeIs('landing-page-settings.about-us') ? 'active' : '' }}">
+                          <i class="bi bi-circle"></i><span>Product</span>
+                      </a>
+                  </li>
               </ul>
           </li><!-- End Components Nav -->
           <li class="nav-item">

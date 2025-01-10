@@ -65,6 +65,8 @@
                                 <label for="image">Gambar: </label>
                                 <div class="col-sm-12">
                                     <input type="file" name="image" id="image" class="form-control">
+                                    <button type="button" class="btn btn-secondary mt-3" id="cancel-image"
+                                        aria-label="Close" hidden>Cancel Image</button>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -95,11 +97,13 @@
     <script>
         $(document).ready(function() {
             var $image = $('#image-preview');
+            var $cancelImage = $('#cancel-image');
             var cropper;
 
             $('#image').change(function(event) {
                 //remove hidden image preview
                 $image.removeAttr('hidden');
+                $cancelImage.removeAttr('hidden');
                 var files = event.target.files;
                 var done = function(url) {
                     if (cropper) {
@@ -130,6 +134,27 @@
                     };
                     reader.readAsDataURL(files[0]);
                 }
+            });
+
+            $('#cancel-image').click(function() {
+                // Reset input file
+                $('#image').val('');
+
+                // Sembunyikan dan reset image preview (jika ada)
+                $image.attr('src', '');
+                $image.hide();
+                $cancelImage.hide();
+
+                // Hancurkan CropperJS jika ada
+                if (cropper) {
+                    cropper.destroy();
+                }
+
+                // Reset nilai input hidden crop
+                $('#crop_x').val('');
+                $('#crop_y').val('');
+                $('#crop_width').val('');
+                $('#crop_height').val('');
             });
         });
     </script>

@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('landing_page_id');
             $table->string('name');
-            $table->string('description');
-            $table->foreignId('image_id');
+            $table->longText('description');
             $table->timestamps();
         });
     }

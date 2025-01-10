@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LandingPageSettingController;
 use App\Http\Controllers\MangaementAdminController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,6 +52,13 @@ Route::middleware('auth')->group(function () {
             Route::patch('/update-home', [LandingPageSettingController::class, 'updateHome'])->name('landing-page-settings.update-home');
             Route::get('/about', [LandingPageSettingController::class, 'aboutUs'])->name('landing-page-settings.about-us');
             Route::patch('/update-about', [LandingPageSettingController::class, 'updateAboutUs'])->name('landing-page-settings.update-about');
+
+            //product
+            Route::get('/product', [ProductController::class, 'index'])->name('landing-page-settings.product');
+            Route::post('/product/store', [ProductController::class, 'store'])->name('landing-page-settings.product.store');
+            Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('landing-page-settings.product.edit');
+            Route::patch('/product/update/{id}', [ProductController::class, 'update'])->name('landing-page-settings.product.update');
+            Route::delete('/product/delete/{id}', [ProductController::class, 'destroy'])->name('landing-page-settings.product.delete');
         });
     });
 });
