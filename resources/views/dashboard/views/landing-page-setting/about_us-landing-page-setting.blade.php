@@ -142,12 +142,13 @@
 
                 // Sembunyikan dan reset image preview (jika ada)
                 $image.attr('src', '');
-                $image.hide();
-                $cancelImage.hide();
+                $image.attr('hidden', 'hidden');
+                $cancelImage.attr('hidden', 'hidden');
 
                 // Hancurkan CropperJS jika ada
                 if (cropper) {
                     cropper.destroy();
+                    cropper = null;
                 }
 
                 // Reset nilai input hidden crop

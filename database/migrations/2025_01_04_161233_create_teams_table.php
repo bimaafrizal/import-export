@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('landing_page_id');
             $table->foreignId('image_id');
             $table->string('job_title');
-            $table->integer('position');
             $table->timestamps();
         });
     }

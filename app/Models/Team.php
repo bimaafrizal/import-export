@@ -10,4 +10,9 @@ class Team extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function image()
+    {
+        return $this->belongsTo(Image::class);
+    }
 }

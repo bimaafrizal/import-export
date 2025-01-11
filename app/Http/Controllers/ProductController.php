@@ -236,7 +236,7 @@ class ProductController extends Controller
             } else if ($request->descriptionEdited1 == 'edited') {
                 $this->updateDescription($request->imageId1, $request->description_image1);
             } else if ($request->statusEdited1 == 'deleted') {
-                $this->deleteImage($request->imageId1);
+                $this->deleteImage($request->imageId1, 'product');
             }
 
             if ($request->hasFile('image2') && $request->statusEdited2 == 'edited') {
@@ -246,7 +246,7 @@ class ProductController extends Controller
             } else if ($request->descriptionEdited2 == 'edited') {
                 $this->updateDescription($request->imageId2, $request->description_image2);
             } else if ($request->statusEdited2 == 'deleted') {
-                $this->deleteImage($request->imageId2);
+                $this->deleteImage($request->imageId2, 'product');
             }
 
             if ($request->hasFile('image3') && $request->statusEdited3 == 'edited') {
@@ -256,7 +256,7 @@ class ProductController extends Controller
             } else if ($request->descriptionEdited3 == 'edited') {
                 $this->updateDescription($request->imageId3, $request->description_image3);
             } else if ($request->statusEdited3 == 'deleted') {
-                $this->deleteImage($request->imageId3);
+                $this->deleteImage($request->imageId3, 'product');
             }
 
 
@@ -298,7 +298,7 @@ class ProductController extends Controller
             $imageIds = array_column($productImages->toArray(), 'image_id');
 
             foreach ($imageIds as $imageId) {
-                $this->deleteImage($imageId);
+                $this->deleteImage($imageId, 'product');
             }
 
             return redirect()->back()->with('success', 'Delete product success');

@@ -33,8 +33,18 @@
                       </a>
                   </li>
                   <li>
-                      <a href="{{ route('landing-page-settings.product') }}" class="{{ request()->routeIs('landing-page-settings.about-us') ? 'active' : '' }}">
+                      <a href="{{ route('landing-page-settings.product.index') }}" class=" {{ request()->routeIs('landing-page-settings.product.*') ? 'active' : '' }}">
                           <i class="bi bi-circle"></i><span>Product</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{{ route('landing-page-settings.team.index')}}" class="{{ request()->routeIs('landing-page-settings.team.*') ? 'active' : '' }}">
+                          <i class="bi bi-circle"></i><span>Team</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="" class="">
+                          <i class="bi bi-circle"></i><span>Contact</span>
                       </a>
                   </li>
               </ul>

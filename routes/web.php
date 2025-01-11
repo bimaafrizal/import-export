@@ -5,6 +5,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LandingPageSettingController;
 use App\Http\Controllers\MangaementAdminController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,11 +55,18 @@ Route::middleware('auth')->group(function () {
             Route::patch('/update-about', [LandingPageSettingController::class, 'updateAboutUs'])->name('landing-page-settings.update-about');
 
             //product
-            Route::get('/product', [ProductController::class, 'index'])->name('landing-page-settings.product');
+            Route::get('/product', [ProductController::class, 'index'])->name('landing-page-settings.product.index');
             Route::post('/product/store', [ProductController::class, 'store'])->name('landing-page-settings.product.store');
             Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('landing-page-settings.product.edit');
             Route::patch('/product/update/{id}', [ProductController::class, 'update'])->name('landing-page-settings.product.update');
             Route::delete('/product/delete/{id}', [ProductController::class, 'destroy'])->name('landing-page-settings.product.delete');
+
+            //team
+            Route::get('/teams', [TeamController::class, 'index'])->name('landing-page-settings.team.index');
+            Route::post('/team/store', [TeamController::class, 'store'])->name('landing-page-settings.team.store');
+            Route::get('/team/edit/{id}', [TeamController::class, 'edit'])->name('landing-page-settings.team.edit');
+            Route::patch('/team/update/{id}', [TeamController::class, 'update'])->name('landing-page-settings.team.update');
+            Route::delete('/team/delete/{id}', [TeamController::class, 'destroy'])->name('landing-page-settings.team.delete');
         });
     });
 });

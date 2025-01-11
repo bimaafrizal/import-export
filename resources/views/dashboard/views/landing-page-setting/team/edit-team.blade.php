@@ -10,7 +10,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Edit Product</h5>
+                        <h5 class="card-title">Edit Team</h5>
                         <div class="row">
                             <div class="col-12">
                                 <div class="d-flex justify-content-end">
@@ -46,117 +46,41 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <form action="{{ route('landing-page-settings.team.update', encrypt($product->id)) }}"
+                                <form action="{{ route('landing-page-settings.team.update', encrypt($team->id)) }}"
                                     method="POST" enctype="multipart/form-data">
                                     @method('PATCH')
                                     @csrf
                                     <div class="modal-body">
                                         <div class="row mb-3 mt-3">
-                                            <label for="inputText" class="col-sm-12 col-form-label">Nama Product*</label>
+                                            <label for="inputText" class="col-sm-12 col-form-label">Nama*</label>
                                             <div class="col-sm-12">
                                                 <input type="text" class="form-control" name="name" required
-                                                    value="{{ old('name', $product->name) }}">
+                                                    value="{{ old('name', $team->name) }}">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3 mt-3">
+                                            <label for="inputText" class="col-sm-12 col-form-label">Posisi*</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" name="job_title" required
+                                                    value="{{ old('job_title', $team->job_title) }}">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="inputText" class="col-sm-12 col-form-label">Deskripsi*</label>
+                                            <label for="image">Gambar *: </label>
                                             <div class="col-sm-12">
-                                                <textarea class="form-control" style="height: 100px" name="description">{{ old('description', $product->description) }}</textarea>
+                                                <input type="file" name="image" id="image" class="form-control "
+                                                    required>
+                                                <button type="button" class="btn btn-secondary mt-3" id="cancel-image"
+                                                    aria-label="Close" hidden>Cancel Image</button>
                                             </div>
                                         </div>
-                                        <?php $count = 0; ?>
-                                        @foreach ($images as $key => $image)
-                                            <?php $count++; ?>
-                                            <div class="row mb-3">
-                                                <label for="image">Gambar {{ $key + 1 }}: </label>
-                                                <div class="col-sm-12">
-                                                    <input type="file" name="image{{ $key + 1 }}"
-                                                        id="image{{ $key + 1 }}" class="form-control">
-                                                    <button type="button" class="btn btn-secondary mt-3"
-                                                        id="cancel-image{{ $key + 1 }}" aria-label="Close"
-                                                        hidden>Cancel Image</button>
-                                                    @if ($key >= 1)
-                                                        <button type="button" class="btn btn-secondary mt-3"
-                                                            id="delete-image{{ $key + 1 }}" aria-label="Close">Delete
-                                                            Image</button>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="row mb-3" id="deskripsi{{ $key + 1 }}">
-                                                <label for="inputText" class="col-sm-12 col-form-label">Deskripsi Gambar
-                                                    {{ $key + 1 }}</label>
-                                                <div class="col-sm-12">
-                                                    <textarea class="form-control" style="height: 100px" name="description_image{{ $key + 1 }}"
-                                                        id="description_image{{ $key + 1 }}">{{ $image->description }}</textarea>
-                                                    <input type="text"
-                                                        name="original_description_image{{ $key + 1 }}"
-                                                        value="{{ $image->description }}" hidden>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-3">
-                                                <img id="image-preview{{ $key + 1 }}" src="{{ $image->path }}"
-                                                    alt="Preview Gambar">
-                                                <input type="hidden" name="crop_x{{ $key + 1 }}"
-                                                    id="crop_x{{ $key + 1 }}">
-                                                <input type="hidden" name="crop_y{{ $key + 1 }}"
-                                                    id="crop_y{{ $key + 1 }}">
-                                                <input type="hidden" name="crop_width{{ $key + 1 }}"
-                                                    id="crop_width{{ $key + 1 }}">
-                                                <input type="hidden" name="crop_height{{ $key + 1 }}"
-                                                    id="crop_height{{ $key + 1 }}">
-                                                <input type="hidden" name="imageId{{ $key + 1 }}"
-                                                    id="imageId{{ $key + 1 }}" value="{{ $image->id }}">
-                                                <input type="hidden" name="statusEdited{{ $key + 1 }}"
-                                                    id="statusEdited{{ $key + 1 }}" value="no-edited">
-                                                <input type="hidden" name="descriptionEdited{{ $key + 1 }}"
-                                                    id="descriptionEdited{{ $key + 1 }}" value="no-edited">
-
-                                            </div>
-                                        @endforeach
-                                        @if ($count != 3)
-                                            <?php for ($i=$count; $i < 3; $i++) { ?>
-                                            <div class="row mb-3">
-                                                <label for="image">Gambar {{ $i + 1 }}: </label>
-                                                <div class="col-sm-12">
-                                                    <input type="file" name="image{{ $i + 1 }}"
-                                                        id="image{{ $i + 1 }}" class="form-control">
-                                                    <button type="button" class="btn btn-secondary mt-3"
-                                                        id="cancel-image{{ $i + 1 }}" aria-label="Close"
-                                                        hidden>Cancel Image</button>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-3" id="deskripsi{{ $i + 1 }}" hidden>
-                                                <label for="inputText" class="col-sm-12 col-form-label">Deskripsi Gambar
-                                                    {{ $i + 1 }}</label>
-                                                <div class="col-sm-12">
-                                                    <textarea class="form-control" style="height: 100px" name="description_image{{ $i + 1 }}"
-                                                        id="description_image{{ $i + 1 }}"></textarea>
-                                                    <input type="text"
-                                                        name="original_description_image{{ $i + 1 }}"
-                                                        value="" hidden>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-3">
-                                                <img id="image-preview{{ $i + 1 }}" src=""
-                                                    alt="Preview Gambar" hidden>
-                                                <input type="hidden" name="crop_x{{ $i + 1 }}"
-                                                    id="crop_x{{ $i + 1 }}">
-                                                <input type="hidden" name="crop_y{{ $i + 1 }}"
-                                                    id="crop_y{{ $i + 1 }}">
-                                                <input type="hidden" name="crop_width{{ $i + 1 }}"
-                                                    id="crop_width{{ $i + 1 }}">
-                                                <input type="hidden" name="crop_height{{ $i + 1 }}"
-                                                    id="crop_height{{ $i + 1 }}">
-                                                <input type="hidden" name="imageId{{ $i + 1 }}"
-                                                    id="imageId{{ $i + 1 }}" value="">
-                                                <input type="hidden" name="statusEdited{{ $i + 1 }}"
-                                                    id="statusEdited{{ $i + 1 }}" value="no-isset">
-                                                <input type="hidden" name="descriptionEdited{{ $i + 1 }}"
-                                                    id="descriptionEdited{{ $i + 1 }}" value="no-edited">
-
-                                            </div>
-                                            <?php } ?>
-                                        @endif
+                                        <div class="row mb-3">
+                                            <img id="image-preview" src="#" alt="Preview Gambar" hidden>
+                                            <input type="hidden" name="crop_x" id="crop_x">
+                                            <input type="hidden" name="crop_y" id="crop_y">
+                                            <input type="hidden" name="crop_width" id="crop_width">
+                                            <input type="hidden" name="crop_height" id="crop_height">
+                                        </div>
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-primary">Save changes</button>
                                         </div>
@@ -218,16 +142,10 @@
 
     <script>
         $(document).ready(function() {
-            handleImageUpload('#image1', '#image-preview1', '#cancel-image1', '#crop_x1', '#crop_y1',
-                '#crop_width1',
-                '#crop_height1', '#deskripsi1', '#delete-image1', '#statusEdited1', '#descriptionEdited1',
-                '#description_image1');
-            handleImageUpload('#image2', '#image-preview2', '#cancel-image2', '#crop_x2', '#crop_y2',
-                '#crop_width2', '#crop_height2', '#deskripsi2', '#delete-image2', '#statusEdited2',
-                '#descriptionEdited2', '#description_image2');
-            handleImageUpload('#image3', '#image-preview3', '#cancel-image3', '#crop_x3', '#crop_y3',
-                '#crop_width3', '#crop_height3', '#deskripsi3', '#delete-image3', '#statusEdited3',
-                '#descriptionEdited3', '#description_image3');
+            handleImageUpload('#image', '#image-preview', '#cancel-image', '#crop_x', '#crop_y',
+                '#crop_width',
+                '#crop_height', '#deskripsi', '#delete-image', '#statusEdited', '#descriptionEdited',
+                '#description_image');
         });
 
         function handleImageUpload(imageInputId, imagePreviewId, cancelButtonId, cropXId, cropYId, cropWidthId,
@@ -266,7 +184,7 @@
                             reader.onload = function(event) {
                                 // Inisialisasi CropperJS setelah gambar selesai dimuat
                                 cropper = new Cropper($image[0], {
-                                    aspectRatio: 3 / 2,
+                                    aspectRatio: 1/1,
                                     viewMode: 1,
                                     crop(event) {
                                         $(cropXId).val(Math.round(event.detail.x));

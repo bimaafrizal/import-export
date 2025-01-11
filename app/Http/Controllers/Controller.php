@@ -89,15 +89,17 @@ class Controller extends BaseController
         return $imageId;
     }
 
-    public function deleteImage($id)
+    public function deleteImage($id, $type = null)
     {
         $image = Image::find($id);
         if (!$image) {
             throw new \Exception('Image not found');
         }
-        ProductImage::where('image_id', $id)->delete();
-        Image::where('id', $id)->get();
+        if ($type == 'product') {
+            ProductImage::where('image_id', $id)->delete();
+        }
 
+        Image::where('id', $id)->get();
         if (file_exists(public_path($image->path))) {
             unlink(public_path($image->path));
         }

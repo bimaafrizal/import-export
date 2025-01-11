@@ -10,13 +10,13 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Manage Product</h5>
+                        <h5 class="card-title">Manage Team</h5>
                         <div class="row mb-3">
                             <div class="col-12">
                                 <div class="d-flex justify-content-end">
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#disablebackdrop">
-                                        Add Product
+                                        Add Team
                                     </button>
                                 </div>
                             </div>
@@ -49,66 +49,30 @@
                         @endif
 
 
-                        @if (empty($products))
+                        @if ($teams->isEmpty())
                             <div class="row">
                                 <div class="col-12">
                                     <div class="d-flex justify-content-center">
-                                        <p>Belum Ada Produk</p>
+                                        <p>Belum Ada team</p>
                                     </div>
                                 </div>
                             </div>
                         @else
                             <div class="row">
-                                @foreach ($products as $key => $product)
+                                @foreach ($teams as $key => $team)
                                     <div class="col-lg-3 col-md-4 col-sm-12">
                                         <div class="card">
-                                            <div id="product{{ $key }}" class="carousel slide"
-                                                data-bs-ride="carousel">
-                                                <div class="carousel-indicators">
-                                                    <?php for($i = 0; $i < $product->count_image; $i++) {?>
-                                                    <button type="button" data-bs-target="#product{{ $key }}"
-                                                        data-bs-slide-to="{{ $i }}"
-                                                        class="{{ $i == 0 ? 'active' : '' }}"
-                                                        aria-label="Slide {{ $i + 1 }}"
-                                                        {{ $i == 0 ? 'aria-current="true"' : '' }}></button>
-                                                    <?php } ?>
-                                                </div>
-                                                <div class="carousel-inner">
-                                                    @foreach ($product->images as $imageKey => $image)
-                                                        <div
-                                                            class="carousel-item {{ $imageKey == 0 ? 'active' : '' }} relative">
-                                                            <img src="{{ asset($image->path) }}" class="d-block w-100"
-                                                                alt="...">
-                                                            <a href="{{ asset($image->path) }}"
-                                                                title="{{ $image->description ?? '-' }}"
-                                                                data-gallery="portfolio-gallery-app"
-                                                                class="glightbox preview-link"><i
-                                                                    class="bi bi-zoom-in"></i></a>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-
-                                                <button class="carousel-control-prev" type="button"
-                                                    data-bs-target="#product{{ $key }}" data-bs-slide="prev">
-                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Previous</span>
-                                                </button>
-                                                <button class="carousel-control-next" type="button"
-                                                    data-bs-target="#product{{ $key }}" data-bs-slide="next">
-                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Next</span>
-                                                </button>
-
-                                            </div>
+                                            <img src="{{ asset($team->image->path) }}" class="card-img-top"
+                                                alt="{{ $team->name }}">
                                             <div class="card-body">
-                                                <h5 class="card-title">{{ $product->name }}</h5>
-                                                <p class="card-text">{{ $product->description }}</p>
+                                                <h5 class="card-title">{{ $team->name }}</h5>
+                                                <p class="card-text">{{ $team->job_title }}</p>
                                                 <div class="row">
                                                     <div class="d-flex justify-content-end">
-                                                        <a href="{{ route('landing-page-settings.product.edit', encrypt($product->id)) }}"
+                                                        <a href="{{ route('landing-page-settings.team.edit', encrypt($team->id)) }}"
                                                             class="btn btn-primary">Edit</a>
                                                         <button type="button" class="btn btn-danger ms-2"
-                                                            onclick="confirmDelete('{{ encrypt($product->id) }}')">Delete</button>
+                                                            onclick="confirmDelete('{{ encrypt($team->id) }}')">Delete</button>
 
                                                     </div>
                                                 </div>
@@ -120,7 +84,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-center">
-                                    {{ $products->links() }}
+                                    {{ $teams->links() }}
                                 </div>
                             </div>
                         @endif
@@ -137,7 +101,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus produk ini?
+                    Apakah Anda yakin ingin menghapus team ini?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -156,38 +120,33 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Product</h5>
+                    <h5 class="modal-title">Add Team</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('landing-page-settings.product.store') }}" method="POST"
+                <form action="{{ route('landing-page-settings.team.store') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="row mb-3 mt-3">
-                            <label for="inputText" class="col-sm-12 col-form-label">Nama Product*</label>
+                            <label for="inputText" class="col-sm-12 col-form-label">Nama*</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" name="name" required
                                     value="{{ old('name') }}">
                             </div>
                         </div>
-                        <div class="row mb-3">
-                            <label for="inputText" class="col-sm-12 col-form-label">Deskripsi*</label>
+                        <div class="row mb-3 mt-3">
+                            <label for="inputText" class="col-sm-12 col-form-label">Posisi*</label>
                             <div class="col-sm-12">
-                                <textarea class="form-control" style="height: 100px" name="description">{{ old('description') }}</textarea>
+                                <input type="text" class="form-control" name="job_title" required
+                                    value="{{ old('job_title') }}">
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="image">Gambar 1*: </label>
+                            <label for="image">Gambar *: </label>
                             <div class="col-sm-12">
                                 <input type="file" name="image" id="image" class="form-control " required>
                                 <button type="button" class="btn btn-secondary mt-3" id="cancel-image"
                                     aria-label="Close" hidden>Cancel Image</button>
-                            </div>
-                        </div>
-                        <div class="row mb-3" id="deskripsi1" hidden>
-                            <label for="inputText" class="col-sm-12 col-form-label">Deskripsi Gambar 1</label>
-                            <div class="col-sm-12">
-                                <textarea class="form-control" style="height: 100px" name="description_image1"></textarea>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -196,48 +155,6 @@
                             <input type="hidden" name="crop_y" id="crop_y">
                             <input type="hidden" name="crop_width" id="crop_width">
                             <input type="hidden" name="crop_height" id="crop_height">
-                        </div>
-                        <div class="row mb-3">
-                            <label for="image">Gambar 2: </label>
-                            <div class="col-sm-12">
-                                <input type="file" name="image2" id="image2" class="form-control">
-                                <button type="button" class="btn btn-secondary mt-3" id="cancel-image2"
-                                    aria-label="Close" hidden>Cancel Image</button>
-                            </div>
-                        </div>
-                        <div class="row mb-3" id="deskripsi2" hidden>
-                            <label for="inputText" class="col-sm-12 col-form-label">Deskripsi Gambar 2</label>
-                            <div class="col-sm-12">
-                                <textarea class="form-control" style="height: 100px" name="description_image2"></textarea>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <img id="image-preview2" src="#" alt="Preview Gambar" hidden>
-                            <input type="hidden" name="crop_x2" id="crop_x2">
-                            <input type="hidden" name="crop_y2" id="crop_y2">
-                            <input type="hidden" name="crop_width2" id="crop_width2">
-                            <input type="hidden" name="crop_height2" id="crop_height2">
-                        </div>
-                        <div class="row mb-3">
-                            <label for="image">Gambar 3: </label>
-                            <div class="col-sm-12">
-                                <input type="file" name="image3" id="image3" class="form-control">
-                                <button type="button" class="btn btn-secondary mt-3" id="cancel-image3"
-                                    aria-label="Close" hidden>Cancel Image</button>
-                            </div>
-                        </div>
-                        <div class="row mb-3" id="deskripsi3" hidden>
-                            <label for="inputText" class="col-sm-12 col-form-label">Deskripsi Gambar 3</label>
-                            <div class="col-sm-12">
-                                <textarea class="form-control" style="height: 100px" name="description_image3"></textarea>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <img id="image-preview3" src="#" alt="Preview Gambar" hidden>
-                            <input type="hidden" name="crop_x3" id="crop_x3">
-                            <input type="hidden" name="crop_y3" id="crop_y3">
-                            <input type="hidden" name="crop_width3" id="crop_width3">
-                            <input type="hidden" name="crop_height3" id="crop_height3">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -334,7 +251,7 @@
                             reader.onload = function(event) {
                                 // Inisialisasi CropperJS setelah gambar selesai dimuat
                                 cropper = new Cropper($image[0], {
-                                    aspectRatio: 3 / 2,
+                                    aspectRatio: 1 / 1,
                                     viewMode: 1,
                                     crop(event) {
                                         $(cropXId).val(Math.round(event.detail.x));
@@ -383,7 +300,7 @@
             console.log('confirmDelete called with ID:', productId);
 
             try {
-                var deleteUrl = "{{ route('landing-page-settings.product.delete', '') }}/" + productId;
+                var deleteUrl = "{{ route('landing-page-settings.team.delete', '') }}/" + productId;
                 console.log('Delete URL:', deleteUrl);
 
                 document.getElementById('deleteForm').action = deleteUrl;
@@ -415,7 +332,4 @@
             });
         });
     </script>
-@endsection
-
-@section('after-scripts')
 @endsection
