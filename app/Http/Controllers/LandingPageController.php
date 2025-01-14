@@ -6,8 +6,10 @@ use App\Models\LandingPage;
 use App\Http\Requests\StoreLandingPageRequest;
 use App\Http\Requests\UpdateLandingPageRequest;
 use App\Models\AboutUs;
+use App\Models\Contact;
 use App\Models\Image;
 use App\Models\Product;
+use App\Models\Team;
 use Intervention\Image\Laravel\Facades\Image as InterventionImage;
 
 class LandingPageController extends Controller
@@ -39,6 +41,10 @@ class LandingPageController extends Controller
                 $imageId[] = $productImage->image_id;
             }
         }
+        $teams = Team::all();
+        foreach ($teams as $t) {
+            $imageId[] = $t->image_id;
+        }
 
         $images = Image::whereIn('id', $imageId)->get();
         // check path image to check the file exists
@@ -58,11 +64,30 @@ class LandingPageController extends Controller
                             }
                         }
                     }
+                } else if($image->type == 'team') {
+                    foreach ($teams as $t) {
+                        if($t->image_id == $image->id) {
+                            $t->image = $image->path;
+                        }
+                    }
                 }
             }
         }
 
-        return view('landing-pages.view.index', compact('landingPage', 'aboutUs', 'products'));
+        //contact
+        $contacts = Contact::where('landing_page_id', 1)->get()->toArray();
+        $socialMedias = [];
+        $requiredContacts = [];
+
+        foreach ($contacts as $contact) {
+            if ($contact['type'] == 'social-media') {
+                $socialMedias[] = $contact;
+            } else {
+                $requiredContacts[$contact["type"]] = $contact;
+            }
+        }
+
+        return view('landing-pages.view.index', data: compact('landingPage', 'aboutUs', 'products', 'teams', 'socialMedias', 'requiredContacts'));
     }
 
     /**

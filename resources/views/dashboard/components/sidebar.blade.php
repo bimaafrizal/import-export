@@ -43,7 +43,7 @@
                       </a>
                   </li>
                   <li>
-                      <a href="" class="">
+                      <a href="{{ route('landing-page-settings.contact.index') }}" class="{{ request()->routeIs('landing-page-settings.contact.*') ? 'active' : '' }}">
                           <i class="bi bi-circle"></i><span>Contact</span>
                       </a>
                   </li>

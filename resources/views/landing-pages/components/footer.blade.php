@@ -8,16 +8,14 @@
               <span class="sitename">GP</span>
             </a>
             <div class="footer-contact pt-3">
-              <p>A108 Adam Street</p>
-              <p>New York, NY 535022</p>
-              <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-              <p><strong>Email:</strong> <span>info@example.com</span></p>
+              <p>{{$requiredContacts['alamat']['value']}}</p>
+              <p class="mt-3"><strong>Phone:</strong> <span>{{$requiredContacts['telepon']['value']}}</span></p>
+              <p><strong>Email:</strong> <span>{{$requiredContacts['email']['value']}}</span></p>
             </div>
             <div class="social-links d-flex mt-4">
-              <a href=""><i class="bi bi-twitter-x"></i></a>
-              <a href=""><i class="bi bi-facebook"></i></a>
-              <a href=""><i class="bi bi-instagram"></i></a>
-              <a href=""><i class="bi bi-linkedin"></i></a>
+                @foreach ($socialMedias as $item)
+                <a href="{{$item["value"]}}" target="_blank"><i class="{{$item['icon']}}"></i></a>
+                @endforeach
             </div>
           </div>
 

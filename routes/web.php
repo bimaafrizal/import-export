@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LandingPageSettingController;
 use App\Http\Controllers\MangaementAdminController;
@@ -67,6 +68,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/team/edit/{id}', [TeamController::class, 'edit'])->name('landing-page-settings.team.edit');
             Route::patch('/team/update/{id}', [TeamController::class, 'update'])->name('landing-page-settings.team.update');
             Route::delete('/team/delete/{id}', [TeamController::class, 'destroy'])->name('landing-page-settings.team.delete');
+
+            //contact
+            Route::get('/contact', [ContactController::class, 'index'])->name('landing-page-settings.contact.index');
+            Route::post('/contact/store', [ContactController::class, 'store'])->name('landing-page-settings.contact.store');
+            Route::get('/contact/edit/{id}', [ContactController::class, 'edit'])->name('landing-page-settings.contact.edit');
+            Route::patch('/contact/update/{id}', [ContactController::class, 'update'])->name('landing-page-settings.contact.update');
+            Route::delete('/contact/delete/{id}', [ContactController::class, 'destroy'])->name('landing-page-settings.contact.delete');
         });
     });
 });

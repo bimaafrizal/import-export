@@ -148,13 +148,13 @@
                                 </div>
                                 <div class="carousel-inner">
                                     @foreach ($product->productImages as $imageKey => $image)
-                                    <div class="carousel-item {{ $imageKey == 0 ? 'active' : '' }}  relative">
-                                        <img src="{{ asset($image->image) }}"
-                                            class="d-block w-100" alt="...">
-                                        <a href="{{ asset($image->image) }}"
-                                            title="{{ !empty($image->description) ? $image->description:  "" }}" data-gallery="product{{ $key }}"
-                                            class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                                    </div>
+                                        <div class="carousel-item {{ $imageKey == 0 ? 'active' : '' }}  relative">
+                                            <img src="{{ asset($image->image) }}" class="d-block w-100" alt="...">
+                                            <a href="{{ asset($image->image) }}"
+                                                title="{{ !empty($image->description) ? $image->description : '' }}"
+                                                data-gallery="product{{ $key }}" class="glightbox preview-link"><i
+                                                    class="bi bi-zoom-in"></i></a>
+                                        </div>
                                     @endforeach
                                 </div>
 
@@ -171,8 +171,8 @@
 
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">{{$product->name}}</h5>
-                                <p class="card-text">{{$product->description}}</p>
+                                <h5 class="card-title">{{ $product->name }}</h5>
+                                <p class="card-text">{{ $product->description }}</p>
                             </div>
                         </div>
                     </div><!-- End Service Item -->
@@ -353,82 +353,20 @@
 
             <div class="row gy-4">
 
-                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                    <div class="team-member">
-                        <div class="member-img">
-                            <img src="{{ asset('landing-page-asset/img/team/team-1.jpg') }}" class="img-fluid"
-                                alt="">
-                            <div class="social">
-                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                <a href=""><i class="bi bi-facebook"></i></a>
-                                <a href=""><i class="bi bi-instagram"></i></a>
-                                <a href=""><i class="bi bi-linkedin"></i></a>
+                @foreach ($teams as $team)
+                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                        <div class="team-member">
+                            <div class="member-img">
+                                <img src="{{ asset($team->image) }}" class="img-fluid"
+                                    alt="">
+                            </div>
+                            <div class="member-info">
+                                <h4>{{$team->name}}</h4>
+                                <span>{{$team->job_title}}</span>
                             </div>
                         </div>
-                        <div class="member-info">
-                            <h4>Walter White</h4>
-                            <span>Chief Executive Officer</span>
-                        </div>
-                    </div>
-                </div><!-- End Team Member -->
-
-                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-                    <div class="team-member">
-                        <div class="member-img">
-                            <img src="{{ asset('landing-page-asset/img/team/team-2.jpg') }}" class="img-fluid"
-                                alt="">
-                            <div class="social">
-                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                <a href=""><i class="bi bi-facebook"></i></a>
-                                <a href=""><i class="bi bi-instagram"></i></a>
-                                <a href=""><i class="bi bi-linkedin"></i></a>
-                            </div>
-                        </div>
-                        <div class="member-info">
-                            <h4>Sarah Jhonson</h4>
-                            <span>Product Manager</span>
-                        </div>
-                    </div>
-                </div><!-- End Team Member -->
-
-                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
-                    <div class="team-member">
-                        <div class="member-img">
-                            <img src="{{ asset('landing-page-asset/img/team/team-3.jpg') }}" class="img-fluid"
-                                alt="">
-                            <div class="social">
-                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                <a href=""><i class="bi bi-facebook"></i></a>
-                                <a href=""><i class="bi bi-instagram"></i></a>
-                                <a href=""><i class="bi bi-linkedin"></i></a>
-                            </div>
-                        </div>
-                        <div class="member-info">
-                            <h4>William Anderson</h4>
-                            <span>CTO</span>
-                        </div>
-                    </div>
-                </div><!-- End Team Member -->
-
-                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
-                    <div class="team-member">
-                        <div class="member-img">
-                            <img src="{{ asset('landing-page-asset/img/team/team-4.jpg') }}" class="img-fluid"
-                                alt="">
-                            <div class="social">
-                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                <a href=""><i class="bi bi-facebook"></i></a>
-                                <a href=""><i class="bi bi-instagram"></i></a>
-                                <a href=""><i class="bi bi-linkedin"></i></a>
-                            </div>
-                        </div>
-                        <div class="member-info">
-                            <h4>Amanda Jepson</h4>
-                            <span>Accountant</span>
-                        </div>
-                    </div>
-                </div><!-- End Team Member -->
-
+                    </div><!-- End Team Member -->
+                @endforeach
             </div>
 
         </div>
@@ -448,7 +386,7 @@
 
             <div class="mb-4" data-aos="fade-up" data-aos-delay="200">
                 <iframe style="border:0; width: 100%; height: 270px;"
-                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d48389.78314118045!2d-74.006138!3d40.710059!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a22a3bda30d%3A0xb89d1fe6bc499443!2sDowntown%20Conference%20Center!5e0!3m2!1sen!2sus!4v1676961268712!5m2!1sen!2sus"
+                    src="{{$requiredContacts['map']['link']}}"
                     frameborder="0" allowfullscreen="" loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div><!-- End Google Maps -->
@@ -460,7 +398,7 @@
                         <i class="bi bi-geo-alt flex-shrink-0"></i>
                         <div>
                             <h3>Address</h3>
-                            <p>A108 Adam Street, New York, NY 535022</p>
+                            <p>{{$requiredContacts['alamat']['value']}}</p>
                         </div>
                     </div><!-- End Info Item -->
 
@@ -468,7 +406,7 @@
                         <i class="bi bi-telephone flex-shrink-0"></i>
                         <div>
                             <h3>Call Us</h3>
-                            <p>+1 5589 55488 55</p>
+                            <p>{{$requiredContacts['telepon']['value']}}</p>
                         </div>
                     </div><!-- End Info Item -->
 
@@ -476,7 +414,7 @@
                         <i class="bi bi-envelope flex-shrink-0"></i>
                         <div>
                             <h3>Email Us</h3>
-                            <p>info@example.com</p>
+                            <p>{{$requiredContacts['email']['value']}}</p>
                         </div>
                     </div><!-- End Info Item -->
 

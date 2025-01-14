@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('landing_page_id')->constrained();
-            $table->string('name');
+            $table->string('title');
+            $table->string('value');
             $table->string('type');
             $table->string('icon')->nullable();
             $table->string('link')->nullable();
