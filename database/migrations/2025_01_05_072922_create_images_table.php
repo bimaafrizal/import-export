@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->longText('description')->nullable();
+            $table->boolean('show_gallery')->default(true);
             $table->timestamps();
         });
     }

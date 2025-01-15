@@ -48,6 +48,8 @@
 
     @include('landing-pages.components.footer')
 
+    @yield('before-script')
+
     <!-- Scroll Top -->
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
@@ -67,6 +69,8 @@
 
     <!-- Main JS File -->
     <script src="{{ asset('landing-page-asset/js/main.js') }}"></script>
+
+    @yield('after-script')
 
 </body>
 

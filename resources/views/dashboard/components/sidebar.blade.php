@@ -39,6 +39,11 @@
                   </li>
                   <li>
                       <a href="{{ route('landing-page-settings.team.index')}}" class="{{ request()->routeIs('landing-page-settings.team.*') ? 'active' : '' }}">
+                          <i class="bi bi-circle"></i><span>Gallery</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{{ route('landing-page-settings.team.index')}}" class="{{ request()->routeIs('landing-page-settings.team.*') ? 'active' : '' }}">
                           <i class="bi bi-circle"></i><span>Team</span>
                       </a>
                   </li>
