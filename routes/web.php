@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\LandingPageController;
@@ -84,6 +85,14 @@ Route::middleware('auth')->group(function () {
             Route::patch('/gallery/update/{id}', [GalleryController::class, 'update'])->name('landing-page-settings.gallery.update');
             Route::patch('/gallery/update-status/{id}', [GalleryController::class, 'updateStatus'])->name('landing-page-settings.gallery.update-status');
             Route::delete('/gallery/delete/{id}', [GalleryController::class, 'destroy'])->name('landing-page-settings.gallery.delete');
+        });
+
+        Route::prefix('blog-categories')->group(function () {
+            Route::get('/', [BlogCategoryController::class, 'index'])->name('blog-categories.index');
+            Route::post('/store', [BlogCategoryController::class, 'store'])->name('blog-categories.store');
+            Route::get('/edit/{id}', [BlogCategoryController::class, 'edit'])->name('blog-categories.edit');
+            Route::patch('/update/{id}', [BlogCategoryController::class, 'update'])->name('blog-categories.update');
+            Route::delete('/delete/{id}', [BlogCategoryController::class, 'destroy'])->name('blog-categories.delete');
         });
     });
 });

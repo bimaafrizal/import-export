@@ -56,6 +56,7 @@ class LandingPageController extends Controller
         // Ambil semua gambar sekaligus
         $images = Image::whereIn('id', $imageIds->unique())
             ->orWhere('type', 'gallery')
+            ->where('show_gallery', 1)
             ->get()
             ->keyBy('id'); // Optimalkan dengan keyBy untuk akses cepat
 
