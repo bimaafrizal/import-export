@@ -38,7 +38,7 @@
                       </a>
                   </li>
                   <li>
-                      <a href="{{ route('landing-page-settings.team.index')}}" class="{{ request()->routeIs('landing-page-settings.team.*') ? 'active' : '' }}">
+                      <a href="{{ route('landing-page-settings.gallery.index')}}" class="{{ request()->routeIs('landing-page-settings.gallery.*') ? 'active' : '' }}">
                           <i class="bi bi-circle"></i><span>Gallery</span>
                       </a>
                   </li>

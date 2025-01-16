@@ -10,13 +10,13 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Manage Team</h5>
+                        <h5 class="card-title">Manage Gallery</h5>
                         <div class="row mb-3">
                             <div class="col-12">
                                 <div class="d-flex justify-content-end">
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#disablebackdrop">
-                                        Add Team
+                                        Add Image
                                     </button>
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                         @endif
 
 
-                        @if ($teams->isEmpty())
+                        @if ($images->isEmpty())
                             <div class="row">
                                 <div class="col-12">
                                     <div class="d-flex justify-content-center">
@@ -59,20 +59,36 @@
                             </div>
                         @else
                             <div class="row">
-                                @foreach ($teams as $key => $team)
+                                @foreach ($images as $key => $image)
                                     <div class="col-lg-3 col-md-4 col-sm-12">
                                         <div class="card">
-                                            <img src="{{ asset($team->image->path) }}" class="card-img-top"
-                                                alt="{{ $team->name }}">
+                                            <img src="{{ asset($image->path) }}" class="card-img-top"
+                                                alt="{{ $image->name }}">
                                             <div class="card-body">
-                                                <h5 class="card-title">{{ $team->name }}</h5>
-                                                <p class="card-text">{{ $team->job_title }}</p>
+                                                <textarea name="" id="" class="form-control mt-2 mb-2" style="height: 100px" readonly>{{ !empty($image->description) ? $image->description : '-' }}</textarea>
                                                 <div class="row">
                                                     <div class="d-flex justify-content-end">
-                                                        <a href="{{ route('landing-page-settings.team.edit', encrypt($team->id)) }}"
-                                                            class="btn btn-primary">Edit</a>
-                                                        <button type="button" class="btn btn-danger ms-2"
-                                                            onclick="confirmDelete('{{ encrypt($team->id) }}')">Delete</button>
+                                                        @if ($image->type == 'gallery')
+                                                            <a href="{{ route('landing-page-settings.gallery.edit', encrypt($image->id)) }}"
+                                                                class="btn btn-primary">Edit</a>
+                                                        @endif
+                                                        <form
+                                                            action="{{ route('landing-page-settings.gallery.update-status', encrypt($image->id)) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            @if ($image->show_gallery == 1)
+                                                                <button class="btn btn-warning ms-2"
+                                                                    type="submit">Hide</button>
+                                                            @else
+                                                                <button class="btn btn-info ms-2"
+                                                                    type="submit">Show</button>
+                                                            @endif
+                                                        </form>
+                                                        @if ($image->type == 'gallery')
+                                                            <button type="button" class="btn btn-danger ms-2"
+                                                                onclick="confirmDelete('{{ encrypt($image->id) }}')">Delete</button>
+                                                        @endif
 
                                                     </div>
                                                 </div>
@@ -84,7 +100,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-center">
-                                    {{ $teams->links() }}
+                                    {{ $images->links() }}
                                 </div>
                             </div>
                         @endif
@@ -123,22 +139,14 @@
                     <h5 class="modal-title">Add Team</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('landing-page-settings.team.store') }}" method="POST"
+                <form action="{{ route('landing-page-settings.gallery.store') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="row mb-3 mt-3">
-                            <label for="inputText" class="col-sm-12 col-form-label">Nama*</label>
+                            <label for="inputText" class="col-sm-12 col-form-label">Deskripsi*</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" name="name" required
-                                    value="{{ old('name') }}">
-                            </div>
-                        </div>
-                        <div class="row mb-3 mt-3">
-                            <label for="inputText" class="col-sm-12 col-form-label">Posisi*</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" name="job_title" required
-                                    value="{{ old('job_title') }}">
+                                <textarea class="form-control" style="height: 100px" name="description">{{ old('description') }}</textarea>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -211,7 +219,7 @@
                             reader.onload = function(event) {
                                 // Inisialisasi CropperJS setelah gambar selesai dimuat
                                 cropper = new Cropper($image[0], {
-                                    aspectRatio: 1 / 1,
+                                    aspectRatio: 4 / 3,
                                     viewMode: 1,
                                     crop(event) {
                                         $(cropXId).val(Math.round(event.detail.x));
@@ -255,12 +263,12 @@
         }
     </script>
     <script>
-        function confirmDelete(productId) {
+        function confirmDelete(imageId) {
             // Set action URL untuk form
-            console.log('confirmDelete called with ID:', productId);
+            console.log('confirmDelete called with ID:', imageId);
 
             try {
-                var deleteUrl = "{{ route('landing-page-settings.team.delete', '') }}/" + productId;
+                var deleteUrl = "{{ route('landing-page-settings.gallery.delete', '') }}/" + imageId;
                 console.log('Delete URL:', deleteUrl);
 
                 document.getElementById('deleteForm').action = deleteUrl;

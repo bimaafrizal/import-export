@@ -20,12 +20,15 @@
             width: 100%;
             overflow: hidden;
             border-radius: 8px;
+            padding-top: 75%;
         }
 
         .gallery-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 300px;
-            /* Fixed height */
+            height: 100%;
             object-fit: cover;
             display: block;
             transition: all 0.3s ease;
@@ -283,153 +286,22 @@
         <div class="container">
             <div class="swiper-container gallery-swiper">
                 <div class="swiper-wrapper">
-                    <!-- Slide 1 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-1.jpg') }}"
-                                alt="Gallery Image 1">
-                            <div class="gallery-info">
-                                <h4>App 1</h4>
-                                <p>Lorem ipsum, dolor sit</p>
-                                <a href="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-1.jpg') }}"
-                                    title="App 1" data-gallery="gallery-gallery-app"
-                                    class="glightbox preview-link-gallery">
-                                    <i class="bi bi-zoom-in"></i>
-                                </a>
-                                <a href="portfolio-details.html" title="More Details" class="details-link">
-                                    <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Slide 2 -->
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                alt="Gallery Image 2">
-                            <div class="gallery-info">
-                                <h4>App 2</h4>
-                                <p>Lorem ipsum, dolor sit</p>
-                                <a href="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                    title="App 2" data-gallery="gallery-gallery-app"
-                                    class="glightbox preview-link-gallery">
-                                    <i class="bi bi-zoom-in"></i>
-                                </a>
-                                <a href="portfolio-details.html" title="More Details" class="details-link">
-                                    <i class="bi bi-link-45deg"></i>
-                                </a>
+                    @foreach ($galleries as $gallery)
+                        <div class="swiper-slide">
+                            <div class="gallery-item">
+                                <img src="{{ asset($gallery['path']) }}" alt="Gallery Image 1">
+                                <div class="gallery-info">
+                                    <p>{{ $gallery['description'] }}</p>
+                                    <a href="{{ asset($gallery['path']) }}"
+                                        title="{{ $gallery['description'] }}" data-gallery="gallery-gallery-app"
+                                        class="glightbox preview-link-gallery">
+                                        <i class="bi bi-zoom-in"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                alt="Gallery Image 2">
-                            <div class="gallery-info">
-                                <h4>App 2</h4>
-                                <p>Lorem ipsum, dolor sit</p>
-                                <a href="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                    title="App 2" data-gallery="gallery-gallery-app"
-                                    class="glightbox preview-link-gallery">
-                                    <i class="bi bi-zoom-in"></i>
-                                </a>
-                                <a href="portfolio-details.html" title="More Details" class="details-link">
-                                    <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                alt="Gallery Image 2">
-                            <div class="gallery-info">
-                                <h4>App 2</h4>
-                                <p>Lorem ipsum, dolor sit</p>
-                                <a href="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                    title="App 2" data-gallery="gallery-gallery-app"
-                                    class="glightbox preview-link-gallery">
-                                    <i class="bi bi-zoom-in"></i>
-                                </a>
-                                <a href="portfolio-details.html" title="More Details" class="details-link">
-                                    <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                alt="Gallery Image 2">
-                            <div class="gallery-info">
-                                <h4>App 2</h4>
-                                <p>Lorem ipsum, dolor sit</p>
-                                <a href="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                    title="App 2" data-gallery="gallery-gallery-app"
-                                    class="glightbox preview-link-gallery">
-                                    <i class="bi bi-zoom-in"></i>
-                                </a>
-                                <a href="portfolio-details.html" title="More Details" class="details-link">
-                                    <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                alt="Gallery Image 2">
-                            <div class="gallery-info">
-                                <h4>App 2</h4>
-                                <p>Lorem ipsum, dolor sit</p>
-                                <a href="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                    title="App 2" data-gallery="gallery-gallery-app"
-                                    class="glightbox preview-link-gallery">
-                                    <i class="bi bi-zoom-in"></i>
-                                </a>
-                                <a href="portfolio-details.html" title="More Details" class="details-link">
-                                    <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                alt="Gallery Image 2">
-                            <div class="gallery-info">
-                                <h4>App 2</h4>
-                                <p>Lorem ipsum, dolor sit</p>
-                                <a href="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                    title="App 2" data-gallery="gallery-gallery-app"
-                                    class="glightbox preview-link-gallery">
-                                    <i class="bi bi-zoom-in"></i>
-                                </a>
-                                <a href="portfolio-details.html" title="More Details" class="details-link">
-                                    <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="gallery-item">
-                            <img src="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                alt="Gallery Image 2">
-                            <div class="gallery-info">
-                                <h4>App 2</h4>
-                                <p>Lorem ipsum, dolor sit</p>
-                                <a href="{{ asset('landing-page-asset/img/masonry-portfolio/masonry-portfolio-2.jpg') }}"
-                                    title="App 2" data-gallery="gallery-gallery-app"
-                                    class="glightbox preview-link-gallery">
-                                    <i class="bi bi-zoom-in"></i>
-                                </a>
-                                <a href="portfolio-details.html" title="More Details" class="details-link">
-                                    <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
 
                 </div>
 

@@ -97,6 +97,10 @@ class Controller extends BaseController
         }
         if ($type == 'product') {
             ProductImage::where('image_id', $id)->delete();
+        } else if($type == "gallery") {
+            if ($image->type != 'gallery') {
+                throw new \Exception('Cannot delete image');
+            }
         }
 
         Image::where('id', $id)->get();

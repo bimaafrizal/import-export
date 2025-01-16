@@ -46,33 +46,46 @@ class LandingPageController extends Controller
             $imageId[] = $t->image_id;
         }
 
-        $images = Image::whereIn('id', $imageId)->get();
+        $images = Image::whereIn('id', $imageId)->orWhere('type', 'gallery')->get();
+        $galleries = [];
         // check path image to check the file exists
         foreach ($images as $image) {
             if (file_exists(public_path($image->path))) {
-                if($image->type == 'hero') {
+                if ($image->type == 'hero') {
                     $landingPage['hero_image'] = $image->path;
-                } else if($image->type == 'about_us') {
+                } else if ($image->type == 'about_us') {
                     $aboutUs['image'] = $image->path;
-                } else if($image->type == 'product') {
+                } else if ($image->type == 'product') {
                     foreach ($products as $product) {
                         foreach ($product->productImages as $productImage) {
-                            if($productImage->image_id == $image->id) {
+                            if ($productImage->image_id == $image->id) {
                                 $productImage->image = $image->path;
                                 $productImage->description = preg_replace('/\\r\\n|\\r|\\n/', "\r\n", $image->description);
                                 $productImage->description = nl2br($productImage->description);
+
+                                //add gallery
+                                $galleries[] = [
+                                    'path' => $image->path,
+                                    'description' => empty($image->description) ? '-' : $image->description,
+                                ];
                             }
                         }
                     }
-                } else if($image->type == 'team') {
+                } else if ($image->type == 'team') {
                     foreach ($teams as $t) {
-                        if($t->image_id == $image->id) {
+                        if ($t->image_id == $image->id) {
                             $t->image = $image->path;
                         }
                     }
+                } else if ($image->type == 'gallery') {
+                    $galleries[] = [
+                        'path' => $image->path,
+                        'description' => empty($image->description) ? '-' : $image->description,
+                    ];
                 }
             }
         }
+
 
         //contact
         $contacts = Contact::where('landing_page_id', 1)->get()->toArray();
@@ -87,7 +100,7 @@ class LandingPageController extends Controller
             }
         }
 
-        return view('landing-pages.view.index', data: compact('landingPage', 'aboutUs', 'products', 'teams', 'socialMedias', 'requiredContacts'));
+        return view('landing-pages.view.index', data: compact('landingPage', 'aboutUs', 'products', 'teams', 'socialMedias', 'requiredContacts', 'galleries'));
     }
 
     /**
