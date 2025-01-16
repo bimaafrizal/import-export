@@ -27,6 +27,7 @@ class Controller extends BaseController
         if (!file_exists($directory)) {
             mkdir($directory, 0777, true);
         }
+
         // Crop gambar jika data crop tersedia
         if ($crop) {
             $image = InterventionImage::read($foto); // Ganti make() dengan read()
@@ -39,6 +40,35 @@ class Controller extends BaseController
         return [
             'name' => $name,
             'path' => '/images/landing-page/' . $name,
+        ];
+    }
+    public function uploadLogo($oldFile, $newRequest, $crop = null)
+    {
+        if ($oldFile != null) {
+            if (file_exists(public_path($oldFile))) {
+                unlink(public_path($oldFile));
+            }
+        }
+
+        $foto = $newRequest;
+        $name = "logo.png";
+        $directory = public_path('/images/logo/');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0777, recursive: true);
+        }
+
+        // Crop gambar jika data crop tersedia
+        if ($crop) {
+            $image = InterventionImage::read($foto); // Ganti make() dengan read()
+            $image->crop($crop['width'], $crop['height'], $crop['x'], $crop['y']);
+            $image->save(public_path('/images/logo/' . $name));
+        } else {
+            $foto->move($directory, $name);
+        }
+
+        return [
+            'name' => $name,
+            'path' => '/images/logo/' . $name,
         ];
     }
 

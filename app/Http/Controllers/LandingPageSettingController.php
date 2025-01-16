@@ -47,7 +47,7 @@ class LandingPageSettingController extends Controller
             }
 
             if ($request->hasFile('logo')) {
-                $uploadLogo = $this->uploadImage($landingPageSettings->logo, $request->file('logo'));
+                $uploadLogo = $this->uploadLogo($landingPageSettings->logo, $request->file('logo'));
                 $logoPath = $uploadLogo['path'];
             }
 

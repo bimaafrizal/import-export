@@ -46,7 +46,7 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <form action="{{ route('landing-page-settings.team.update', encrypt($product->id)) }}"
+                                <form action="{{ route('landing-page-settings.product.update', encrypt($product->id)) }}"
                                     method="POST" enctype="multipart/form-data">
                                     @method('PATCH')
                                     @csrf

@@ -260,7 +260,7 @@ class ProductController extends Controller
             }
 
 
-            return redirect()->route('landing-page-settings.product')->with('success', 'Edit product success');
+            return redirect()->route('landing-page-settings.product.index')->with('success', 'Edit product success');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }

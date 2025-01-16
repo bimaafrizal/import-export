@@ -239,11 +239,11 @@
                                     <?php } ?>
                                 </div>
                                 <div class="carousel-inner">
-                                    @foreach ($product->productImages as $imageKey => $image)
+                                    @foreach ($product->productImages as $imageKey => $imageValue)
                                         <div class="carousel-item {{ $imageKey == 0 ? 'active' : '' }}  relative">
-                                            <img src="{{ asset($image->image) }}" class="d-block w-100" alt="...">
-                                            <a href="{{ asset($image->image) }}"
-                                                title="{{ !empty($image->description) ? $image->description : '' }}"
+                                            <img src="{{ asset($imageValue->image) }}" class="d-block w-100" alt="...">
+                                            <a href="{{ asset($imageValue->image) }}"
+                                                title="{{ !empty($imageValue->description) ? $imageValue->description : '' }}"
                                                 data-gallery="product{{ $key }}" class="glightbox preview-link"><i
                                                     class="bi bi-zoom-in"></i></a>
                                         </div>

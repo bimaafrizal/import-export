@@ -19,88 +19,102 @@ class LandingPageController extends Controller
      */
     public function index()
     {
-        $landingPage = LandingPage::where('id', 1)->first()->toArray();
-        $landingPage['hero_image'] = null;
-        if (!empty($landingPage['image_id'])) {
-            $imageId = [$landingPage['image_id']];
+        // Ambil data landing page
+        $landingPage = LandingPage::find(1);
+        $landingPageData = $landingPage ? $landingPage->toArray() : [];
+        $landingPageData['hero_image'] = null;
+
+        // Kumpulkan semua ID gambar
+        $imageIds = collect();
+        if (!empty($landingPageData['image_id'])) {
+            $imageIds->push($landingPageData['image_id']);
         }
 
-        $aboutUs = AboutUs::where('id', 1)->first();
-        if (!empty($aboutUs)) {
-            $aboutUs = $aboutUs->toArray();
-            if (!empty($aboutUs['image_id'])) {
-                $imageId[] = $aboutUs['image_id'];
+        // Ambil data About Us
+        $aboutUs = AboutUs::find(1);
+        $aboutUsData = [];
+        if ($aboutUs) {
+            $aboutUsData = $aboutUs->toArray();
+            if (!empty($aboutUsData['image_id'])) {
+                $imageIds->push($aboutUsData['image_id']);
             }
-
-            $aboutUs['content'] = preg_replace('/\\r\\n|\\r|\\n/', "\r\n", $aboutUs['content']);
-            $aboutUs['content'] = nl2br($aboutUs['content']);
+            $aboutUsData['content'] = nl2br(preg_replace('/\\r\\n|\\r|\\n/', "\r\n", $aboutUsData['content']));
         }
+
+        // Ambil produk dan gambar terkait
         $products = Product::with('productImages')->get();
-        foreach ($products as $product) {
-            foreach ($product->productImages as $productImage) {
-                $imageId[] = $productImage->image_id;
-            }
-        }
+        $products->each(function ($product) use ($imageIds) {
+            $product->productImages->each(function ($image) use ($imageIds) {
+                $imageIds->push($image->image_id);
+            });
+        });
+
+        // Ambil data tim
         $teams = Team::all();
-        foreach ($teams as $t) {
-            $imageId[] = $t->image_id;
+        $imageIds = $imageIds->merge($teams->pluck('image_id'));
+
+        // Ambil semua gambar sekaligus
+        $images = Image::whereIn('id', $imageIds->unique())
+            ->orWhere('type', 'gallery')
+            ->get()
+            ->keyBy('id'); // Optimalkan dengan keyBy untuk akses cepat
+
+        // Proses gambar untuk landing page
+        if (!empty($landingPageData['image_id']) && $images->has($landingPageData['image_id'])) {
+            $landingPageData['hero_image'] = $images[$landingPageData['image_id']]->path;
         }
 
-        $images = Image::whereIn('id', $imageId)->orWhere('type', 'gallery')->get();
-        $galleries = [];
-        // check path image to check the file exists
-        foreach ($images as $image) {
-            if (file_exists(public_path($image->path))) {
-                if ($image->type == 'hero') {
-                    $landingPage['hero_image'] = $image->path;
-                } else if ($image->type == 'about_us') {
-                    $aboutUs['image'] = $image->path;
-                } else if ($image->type == 'product') {
-                    foreach ($products as $product) {
-                        foreach ($product->productImages as $productImage) {
-                            if ($productImage->image_id == $image->id) {
-                                $productImage->image = $image->path;
-                                $productImage->description = preg_replace('/\\r\\n|\\r|\\n/', "\r\n", $image->description);
-                                $productImage->description = nl2br($productImage->description);
+        // Proses gambar untuk About Us
+        if (!empty($aboutUsData['image_id']) && $images->has($aboutUsData['image_id'])) {
+            $aboutUsData['image'] = $images[$aboutUsData['image_id']]->path;
+        }
 
-                                //add gallery
-                                $galleries[] = [
-                                    'path' => $image->path,
-                                    'description' => empty($image->description) ? '-' : $image->description,
-                                ];
-                            }
-                        }
-                    }
-                } else if ($image->type == 'team') {
-                    foreach ($teams as $t) {
-                        if ($t->image_id == $image->id) {
-                            $t->image = $image->path;
-                        }
-                    }
-                } else if ($image->type == 'gallery') {
+        // Tambahkan gambar pada produk
+        $galleries = [];
+        $products->each(function ($product) use ($images, &$galleries) {
+            $product->productImages->each(function ($productImage) use ($images, &$galleries) {
+                if ($images->has($productImage->image_id)) {
+                    $image = $images[$productImage->image_id];
+                    $productImage->image = $image->path;
+                    $productImage->description = nl2br(preg_replace('/\\r\\n|\\r|\\n/', "\r\n", $image->description));
                     $galleries[] = [
                         'path' => $image->path,
-                        'description' => empty($image->description) ? '-' : $image->description,
+                        'description' => $image->description ?: '-',
                     ];
                 }
+            });
+        });
+
+        // Tambahkan gambar pada tim
+        $teams->each(function ($team) use ($images) {
+            if ($images->has($team->image_id)) {
+                $team->image = $images[$team->image_id]->path;
             }
+        });
+
+        // Tambahkan gambar galeri
+        $galleryImages = $images->filter(fn($image) => $image->type === 'gallery');
+        foreach ($galleryImages as $galleryImage) {
+            $galleries[] = [
+                'path' => $galleryImage->path,
+                'description' => $galleryImage->description ?: '-',
+            ];
         }
 
+        // Ambil kontak
+        $contacts = Contact::where('landing_page_id', 1)->get();
+        $socialMedias = $contacts->where('type', 'social-media');
+        $requiredContacts = $contacts->whereNotIn('type', ['social-media'])->keyBy('type');
 
-        //contact
-        $contacts = Contact::where('landing_page_id', 1)->get()->toArray();
-        $socialMedias = [];
-        $requiredContacts = [];
-
-        foreach ($contacts as $contact) {
-            if ($contact['type'] == 'social-media') {
-                $socialMedias[] = $contact;
-            } else {
-                $requiredContacts[$contact["type"]] = $contact;
-            }
-        }
-
-        return view('landing-pages.view.index', data: compact('landingPage', 'aboutUs', 'products', 'teams', 'socialMedias', 'requiredContacts', 'galleries'));
+        return view('landing-pages.view.index', [
+            'landingPage' => $landingPageData,
+            'aboutUs' => $aboutUsData,
+            'products' => $products,
+            'teams' => $teams,
+            'socialMedias' => $socialMedias,
+            'requiredContacts' => $requiredContacts,
+            'galleries' => $galleries,
+        ]);
     }
 
     /**

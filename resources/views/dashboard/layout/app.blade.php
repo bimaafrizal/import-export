@@ -10,8 +10,14 @@
         <meta content="" name="keywords">
 
         <!-- Favicons -->
+        @if (file_exists(public_path('/images/logo/logo.png')))
+        <link href="{{ asset('/images/logo/logo.png') }}" rel="icon">
+        <link href="{{ asset('/images/logo/logo.png') }}" rel="apple-touch-icon">
+
+        @else
         <link href="{{ asset('dashboard-assets/img/favicon.png') }}" rel="icon">
         <link href="{{ asset('dashboard-assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+        @endif
 
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect">
