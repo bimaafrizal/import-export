@@ -72,7 +72,7 @@ class Controller extends BaseController
         ];
     }
 
-    public function saveUploadImage($crop_x, $crop_y, $crop_width, $crop_height, $requestImage, $imageId, $type, $decription = null, $typeUpload = []): int
+    public function saveUploadImage($crop_x, $crop_y, $crop_width, $crop_height, $requestImage, $imageId, $type, $decription = null, $typeUpload = [])
     {
         $pathOldImage = null;
 
@@ -115,6 +115,13 @@ class Controller extends BaseController
                 'path' => $path,
                 'description' => $decription,
             ]);
+        }
+
+        if($type == 'blog') {
+            return [
+                'path' => $path,
+                'image_id' => $imageId,
+            ];
         }
         return $imageId;
     }

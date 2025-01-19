@@ -61,7 +61,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link {{ request()->routeIs('blog.*') ? '' : 'collapsed' }}" href="{{ route('management-admin.index') }}">
+              <a class="nav-link {{ request()->routeIs('blogs.*') ? '' : 'collapsed' }}" href="{{ route('blogs.index') }}">
                   <i class="bi bi-newspaper"></i>
                   <span>Blog</span>
               </a>

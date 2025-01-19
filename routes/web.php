@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogCategoryController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\LandingPageController;
@@ -87,12 +88,25 @@ Route::middleware('auth')->group(function () {
             Route::delete('/gallery/delete/{id}', [GalleryController::class, 'destroy'])->name('landing-page-settings.gallery.delete');
         });
 
+        //blog categories
         Route::prefix('blog-categories')->group(function () {
             Route::get('/', [BlogCategoryController::class, 'index'])->name('blog-categories.index');
             Route::post('/store', [BlogCategoryController::class, 'store'])->name('blog-categories.store');
             Route::get('/edit/{id}', [BlogCategoryController::class, 'edit'])->name('blog-categories.edit');
             Route::patch('/update/{id}', [BlogCategoryController::class, 'update'])->name('blog-categories.update');
             Route::delete('/delete/{id}', [BlogCategoryController::class, 'destroy'])->name('blog-categories.delete');
+        });
+
+        //blogs
+        Route::prefix('blogs')->group(function () {
+            Route::get('/', [BlogController::class, 'index'])->name('blogs.index');
+            Route::get('/create', [BlogController::class, 'create'])->name('blogs.create');
+            Route::post('/store', [BlogController::class, 'store'])->name('blogs.store');
+            Route::get('/edit/{id}', [BlogController::class, 'edit'])->name('blogs.edit');
+            Route::patch('/update/{id}', [BlogController::class, 'update'])->name('blogs.update');
+            Route::delete('/delete/{id}', [BlogController::class, 'destroy'])->name('blogs.delete');
+            Route::post('/upload-image', [BlogController::class, 'uploadImageContentBlogs'])->name('blogs.upload-image');
+            Route::delete('/delete-image', [BlogController::class, 'deleteImageBlogs'])->name('blogs.delete-image');
         });
     });
 });
