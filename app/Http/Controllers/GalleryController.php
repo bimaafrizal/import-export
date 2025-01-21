@@ -13,7 +13,7 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        $images = Image::whereIn('type', ['gallery', 'product'])->simplePaginate(10);
+        $images = Image::whereIn('type', ['gallery', 'product', 'blog'])->simplePaginate(10);
 
         //rubah description
         foreach ($images as $image) {

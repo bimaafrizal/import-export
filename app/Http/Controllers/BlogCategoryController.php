@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BlogCategory;
 use App\Http\Requests\StoreBlogCategoryRequest;
 use App\Http\Requests\UpdateBlogCategoryRequest;
+use App\Models\Blog;
 use Illuminate\Http\Request;
 
 class BlogCategoryController extends Controller
@@ -103,6 +104,11 @@ class BlogCategoryController extends Controller
             $blogCategory = BlogCategory::find($id);
             if (!$blogCategory) {
                 return redirect()->route('blog-categories.index')->with('error', 'Blog category not found');
+            }
+            //cek apakah blog category ini memiliki blog post
+            $blog = Blog::where('blog_category_id', $blogCategory->id)->first();
+            if ($blog) {
+                return redirect()->route('blog-categories.index')->with('error', 'Failed to delete blog category, because this blog category has blog post');
             }
             $blogCategory->delete();
             return redirect()->route('blog-categories.index')->with('success', 'Blog category deleted successfully');

@@ -60,16 +60,16 @@
                                 <form
                                     action="{{ isset($blog) ? route('blogs.update', encrypt($blog->id)) : route('blogs.store') }}"
                                     method="POST" enctype="multipart/form-data">
-                                    @method('PATCH')
+                                    @csrf
                                     @if (isset($blog))
-                                        @csrf
+                                        @method('PATCH')
                                     @endif
                                     <div class="modal-body">
                                         <div class="row mb-3 mt-3">
                                             <label for="inputText" class="col-sm-12 col-form-label">Title*</label>
                                             <div class="col-sm-12">
                                                 <input type="text" class="form-control" name="title" required
-                                                    value="{{ old('name', $blog->title ?? '') }}">
+                                                    value="{{ old('title', $blog->title ?? '') }}">
                                             </div>
                                         </div>
                                         <div class="row mb-3 mt-3">
@@ -79,7 +79,7 @@
                                                     name="blog_category_id">
                                                     @foreach ($blogCategories as $category)
                                                         <option value="{{ $category->id }}"
-                                                            {{ old('blog_category_id') ? 'selected' : '' }}>
+                                                            {{ old('blog_category_id', isset($blog->blog_category_id) ? $blog->blog_category_id == $category->id : "") ? 'selected' : '' }}>
                                                             {{ $category->name }}</option>
                                                     @endforeach
                                                 </select>
@@ -89,13 +89,13 @@
                                             <label for="image">Gambar *: </label>
                                             <div class="col-sm-12">
                                                 <input type="file" name="image" id="image" class="form-control "
-                                                    required>
+                                                    >
                                                 <button type="button" class="btn btn-secondary mt-3" id="cancel-image"
                                                     aria-label="Close" hidden>Cancel Image</button>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <img id="image-preview" src="#" alt="Preview Gambar" hidden>
+                                            <img id="image-preview" src="{{ isset($blog->image->path) ? $blog->image->path :"#" }}" alt="Preview Gambar">
                                             <input type="hidden" name="crop_x" id="crop_x">
                                             <input type="hidden" name="crop_y" id="crop_y">
                                             <input type="hidden" name="crop_width" id="crop_width">
@@ -104,10 +104,7 @@
                                         <div class="row mb-3 mt-3">
                                             <label for="inputText" class="col-sm-12 col-form-label">Content*</label>
                                             <div class="col-sm-12">
-                                                {{-- <textarea class="form-control" name="content" id="editor" required>{{ old('name', $blog->title ?? '') }}</textarea> --}}
-                                                <div id="editor">
-                                                    {{ old('content', $blog->content ?? '') }}
-                                                </div>
+                                                <textarea name="content" id="editor">{{ old('content', $blog->content ?? '') }}</textarea>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -140,6 +137,13 @@
             var $cancelImage = $(cancelButtonId);
             var $description = $(descriptionId);
             var cropper;
+
+            //jika src image kosong maka hidden
+            if ($image.attr('src') == "#") {
+                $image.attr('hidden', 'hidden');
+                $cancelImage.attr('hidden', 'hidden');
+                $description.attr('hidden', 'hidden');
+            }
 
             $(imageInputId).change(function(event) {
                 if (this.id === imageInputId.replace('#', '')) {

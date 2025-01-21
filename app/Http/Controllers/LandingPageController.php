@@ -56,6 +56,7 @@ class LandingPageController extends Controller
         // Ambil semua gambar sekaligus
         $images = Image::whereIn('id', $imageIds->unique())
             ->orWhere('type', 'gallery')
+            ->orWhere('type', 'blog')
             ->where('show_gallery', 1)
             ->get()
             ->keyBy('id'); // Optimalkan dengan keyBy untuk akses cepat
@@ -85,6 +86,15 @@ class LandingPageController extends Controller
                 }
             });
         });
+
+        //tambahkan gambar blog pada gallery
+        $blogImages = $images->filter(fn($image) => $image->type === 'blog');
+        foreach ($blogImages as $blogImage) {
+            $galleries[] = [
+                'path' => $blogImage->path,
+                'description' => $blogImage->description ?: '-',
+            ];
+        }
 
         // Tambahkan gambar pada tim
         $teams->each(function ($team) use ($images) {

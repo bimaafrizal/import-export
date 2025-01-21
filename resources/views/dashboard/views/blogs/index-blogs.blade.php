@@ -54,14 +54,22 @@
                                     <th>
                                         Title
                                     </th>
+                                    <th>
+                                        Category Blog
+                                    </th>
+                                    <th>
+                                        Create By
+                                    </th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($blogCategories as $key => $category)
+                                @foreach ($blogs as $key => $blog)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $category->name }}</td>
+                                        <td>{{ $blog->title }}</td>
+                                        <td>{{ $blog->blogCategory->name }}</td>
+                                        <td>{{ $blog->user->name }}</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-primary dropdown-toggle"
@@ -70,18 +78,18 @@
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li><a class="dropdown-item"
-                                                            href="{{ route('blog-categories.edit', encrypt($category->id)) }}">Edit</a>
+                                                            href="{{ route('blogs.edit', encrypt($blog->id)) }}">Edit</a>
                                                     </li>
                                                     <li><a class="dropdown-item" data-bs-toggle="modal"
                                                             data-bs-target="#deleteModal"
                                                             data-bs-dismiss="modal"
-                                                            onclick="confirmDelete('{{ encrypt($category->id) }}')">Delete</a>
+                                                            onclick="confirmDelete('{{ encrypt($blog->id) }}')">Delete</a>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach --}}
+                                @endforeach
                             </tbody>
                         </table>
                         <!-- End Table with stripped rows -->
@@ -98,7 +106,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    Apakah anda yakin ingin menghapus category blog ini?
+                    Apakah anda yakin ingin menghapus artikel blog ini?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -112,45 +120,18 @@
         </div>
     </div>
 
-    <div class="modal fade" id="disablebackdrop" tabindex="-1" data-bs-backdrop="false" style="display: none;"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('blog-categories.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row mb-3 mt-3">
-                            <label for="inputText" class="col-sm-12 col-form-label">Title*</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" name="name" required
-                                    value="{{ old('name') }}">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 
 @section('before-scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function confirmDelete(categoryId) {
+        function confirmDelete(blogId) {
             // Set action URL untuk form
-            console.log('confirmDelete called with ID:', categoryId);
+            console.log('confirmDelete called with ID:', blogId);
 
             try {
-                var deleteUrl = "{{ route('blog-categories.delete', '') }}/" + categoryId;
+                var deleteUrl = "{{ route('blogs.delete', '') }}/" + blogId;
                 console.log('Delete URL:', deleteUrl);
 
                 document.getElementById('deleteForm').action = deleteUrl;

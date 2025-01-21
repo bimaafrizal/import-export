@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -164,6 +165,11 @@ class MangaementAdminController extends Controller
             }
             if ($user->role_id == 2) {
                 throw new \Exception('Super Admin tidak bisa dihapus');
+            }
+            //chek apakah sudah punya artikel blog
+            $blog = Blog::where('user_id', $user->id)->first();
+            if ($blog) {
+                throw new \Exception('Admin tidak bisa dihapus karena sudah memiliki artikel blog');
             }
             $user->delete();
 
