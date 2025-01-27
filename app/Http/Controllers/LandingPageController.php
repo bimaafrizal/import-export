@@ -6,6 +6,7 @@ use App\Models\LandingPage;
 use App\Http\Requests\StoreLandingPageRequest;
 use App\Http\Requests\UpdateLandingPageRequest;
 use App\Models\AboutUs;
+use App\Models\Blog;
 use App\Models\Contact;
 use App\Models\Image;
 use App\Models\Product;
@@ -53,13 +54,23 @@ class LandingPageController extends Controller
         $teams = Team::all();
         $imageIds = $imageIds->merge($teams->pluck('image_id'));
 
+        //blog
+        $blogs = Blog::with('blogCategory');
+        $blogCount = $blogs->count();
+        $blogs = $blogs->limit(3)->orderBy('created_at', 'desc')->get();
+        $imageIds = $imageIds->merge($blogs->pluck('image_id'));
+
         // Ambil semua gambar sekaligus
         $images = Image::whereIn('id', $imageIds->unique())
             ->orWhere('type', 'gallery')
             ->orWhere('type', 'blog')
-            ->where('show_gallery', 1)
+            ->orWhere('type', 'product')
+            ->orWhere('type', 'team')
+            ->orWhere('type', 'about_us')
+            ->orWhere('type', 'hero')
             ->get()
             ->keyBy('id'); // Optimalkan dengan keyBy untuk akses cepat
+        // dd($images);
 
         // Proses gambar untuk landing page
         if (!empty($landingPageData['image_id']) && $images->has($landingPageData['image_id'])) {
@@ -79,10 +90,12 @@ class LandingPageController extends Controller
                     $image = $images[$productImage->image_id];
                     $productImage->image = $image->path;
                     $productImage->description = nl2br(preg_replace('/\\r\\n|\\r|\\n/', "\r\n", $image->description));
-                    $galleries[] = [
-                        'path' => $image->path,
-                        'description' => $image->description ?: '-',
-                    ];
+                    if($image->show_gallery == 1) {
+                        $galleries[] = [
+                            'path' => $image->path,
+                            'description' => $image->description ?: '-',
+                        ];
+                    }
                 }
             });
         });
@@ -90,10 +103,12 @@ class LandingPageController extends Controller
         //tambahkan gambar blog pada gallery
         $blogImages = $images->filter(fn($image) => $image->type === 'blog');
         foreach ($blogImages as $blogImage) {
-            $galleries[] = [
-                'path' => $blogImage->path,
-                'description' => $blogImage->description ?: '-',
-            ];
+            if($blogImage->show_gallery == 1) {
+                $galleries[] = [
+                    'path' => $blogImage->path,
+                    'description' => $blogImage->description ?: '-',
+                ];
+            }
         }
 
         // Tambahkan gambar pada tim
@@ -103,13 +118,24 @@ class LandingPageController extends Controller
             }
         });
 
+        //blog image
+        $blogs->each(function ($blog) use ($images) {
+            if ($images->has($blog->image_id)) {
+                $blog->image = $images[$blog->image_id]->path;
+            }
+            //convert created_at to human readable
+            $blog->created_at = $blog->created_at->diffForHumans();
+        });
+
         // Tambahkan gambar galeri
         $galleryImages = $images->filter(fn($image) => $image->type === 'gallery');
         foreach ($galleryImages as $galleryImage) {
-            $galleries[] = [
-                'path' => $galleryImage->path,
-                'description' => $galleryImage->description ?: '-',
-            ];
+            if($galleryImage->show_gallery == 1) {
+                $galleries[] = [
+                    'path' => $galleryImage->path,
+                    'description' => $galleryImage->description ?: '-',
+                ];
+            }
         }
 
         // Ambil kontak
@@ -125,7 +151,33 @@ class LandingPageController extends Controller
             'socialMedias' => $socialMedias,
             'requiredContacts' => $requiredContacts,
             'galleries' => $galleries,
+            'blogs' => $blogs,
+            'blogCount' => $blogCount,
         ]);
+    }
+
+    public function blogDetail($slug)
+    {
+        try {
+            $blog = Blog::with('blogCategory', 'user')->where('slug', $slug)->firstOrFail();
+            $image = Image::find($blog->image_id);
+            $blog->image = $image->path;
+            $blog->created_at = $blog->created_at->diffForHumans();
+            $landingPage = LandingPage::find(1);
+
+            $contacts = Contact::where('landing_page_id', 1)->get();
+            $socialMedias = $contacts->where('type', 'social-media');
+            $requiredContacts = $contacts->whereNotIn('type', ['social-media'])->keyBy('type');
+
+            return view('landing-pages.view.detail-blog', [
+                'blog' => $blog,
+                'socialMedias' => $socialMedias,
+                'requiredContacts' => $requiredContacts,
+                'landingPage' => $landingPage,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->route('index');
+        }
     }
 
     /**

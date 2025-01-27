@@ -56,7 +56,7 @@
           </li><!-- End Components Nav -->
           <li class="nav-item">
               <a class="nav-link {{ request()->routeIs('blog-categories.*') ? '' : 'collapsed' }}" href="{{ route('blog-categories.index') }}">
-                  <i class="bi bi-person-fill-gear"></i>
+                  <i class="bi bi-tag-fill"></i>
                   <span>Kategori Blog</span>
               </a>
           </li>

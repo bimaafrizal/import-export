@@ -100,6 +100,7 @@ class BlogController extends Controller
             }
 
             $image = Image::where('path', $request->file_path)->first();
+            $imageId = $image->id;
             if (!$image) {
                 return response()->json(['error' => 'Image not found'], 404);
             }
@@ -107,7 +108,11 @@ class BlogController extends Controller
             if (file_exists(public_path($image->path))) {
                 unlink(public_path($image->path));
             }
-            Image::where('path', $request->file_path)->delete();
+            Image::where('path', $imageId)->delete();
+
+            //delete image from blog_images
+            BlogImage::where('image_id', $image->id)->delete();
+
             return response()->json(['success' => true, 'message' => 'File berhasil dihapus.']);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()], 500);

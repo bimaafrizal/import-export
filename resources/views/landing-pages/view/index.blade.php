@@ -1,126 +1,5 @@
 @extends('landing-pages.layout.main')
 
-@section('after-style')
-    <style>
-        .gallery-swiper {
-            width: 100%;
-            padding-bottom: 50px;
-            /* Ruang untuk pagination */
-        }
-
-        .swiper-slide {
-            height: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .gallery-item {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-            border-radius: 8px;
-            padding-top: 75%;
-        }
-
-        .gallery-item img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: all 0.3s ease;
-        }
-
-        .gallery-info {
-            position: absolute;
-            bottom: -50px;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            transition: all 0.3s ease;
-            color: white;
-            opacity: 0;
-        }
-
-        .gallery-item:hover .gallery-info {
-            bottom: 0;
-            opacity: 1;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .gallery-info h4 {
-            font-size: 18px;
-            margin: 0 0 5px 0;
-        }
-
-        .gallery-info p {
-            font-size: 14px;
-            margin: 0;
-        }
-
-        .preview-link-gallery,
-        .details-link {
-            position: absolute;
-            right: 15px;
-            top: 15px;
-            color: white;
-            font-size: 24px;
-            transition: all 0.3s ease;
-        }
-
-        .details-link {
-            right: 50px;
-        }
-
-        .preview-link-gallery:hover,
-        .details-link:hover {
-            color: #0088cc;
-        }
-
-        /* Navigation buttons */
-        .swiper-button-next,
-        .swiper-button-prev {
-            color: #0088cc;
-        }
-
-        /* Pagination */
-        .swiper-pagination-bullet-active {
-            background: #0088cc;
-        }
-
-        .swiper-container {
-            position: relative;
-            /* Penting untuk positioning tombol */
-        }
-
-        .swiper-button-next,
-        .swiper-button-prev {
-            position: absolute;
-            top: 50%;
-            /* Posisikan di tengah vertikal */
-            transform: translateY(-50%);
-            z-index: 10;
-            width: 40px;
-            height: 40px;
-        }
-
-        .swiper-button-next {
-            right: 10px;
-        }
-
-        .swiper-button-prev {
-            left: 10px;
-        }
-    </style>
-@endsection
-
 @section('after-script')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -241,7 +120,8 @@
                                 <div class="carousel-inner">
                                     @foreach ($product->productImages as $imageKey => $imageValue)
                                         <div class="carousel-item {{ $imageKey == 0 ? 'active' : '' }}  relative">
-                                            <img src="{{ asset($imageValue->image) }}" class="d-block w-100" alt="...">
+                                            <img src="{{ asset($imageValue->image) }}" class="d-block w-100"
+                                                alt="...">
                                             <a href="{{ asset($imageValue->image) }}"
                                                 title="{{ !empty($imageValue->description) ? $imageValue->description : '' }}"
                                                 data-gallery="product{{ $key }}" class="glightbox preview-link"><i
@@ -293,9 +173,8 @@
                                 <img src="{{ asset($gallery['path']) }}" alt="Gallery Image 1">
                                 <div class="gallery-info">
                                     <p>{{ $gallery['description'] }}</p>
-                                    <a href="{{ asset($gallery['path']) }}"
-                                        title="{{ $gallery['description'] }}" data-gallery="gallery-gallery-app"
-                                        class="glightbox preview-link-gallery">
+                                    <a href="{{ asset($gallery['path']) }}" title="{{ $gallery['description'] }}"
+                                        data-gallery="gallery-gallery-app" class="glightbox preview-link-gallery">
                                         <i class="bi bi-zoom-in"></i>
                                     </a>
                                 </div>
@@ -309,6 +188,44 @@
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-pagination"></div>
+            </div>
+        </div>
+
+    </section>
+
+    <section id="blog" class="gallery section">
+
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Blog</h2>
+            <p>Check our Blog</p>
+        </div>
+
+        <div class="container">
+            <div class="row gy-4">
+                @foreach ($blogs as $blog)
+                    <div class="card card-blog mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="{{ asset($blog->image) }}" class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $blog->title }}</h5>
+                                    <p class="card-text">{{ $blog->blogCategory->name }} - {{ $blog->created_at }}</p>
+                                    <div class="read-more-container">
+                                        <a href="{{ route('blog-detail', $blog->slug) }}" class="btn btn-primary">Read
+                                            More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                @if ($blogCount > 3)
+                <div class="d-flex justify-content-center align-items-cente read-all">
+                    <a href="{{ route('blog-detail', $blog->slug) }}" class="btn btn-primary">Show All</a>
+                </div>
+                @endif
             </div>
         </div>
 

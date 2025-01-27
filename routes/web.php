@@ -37,6 +37,11 @@ Route::controller(AuthController::class)->group(function () {
         ->middleware('auth')
         ->name('logout');
 });
+Route::prefix('/blog')->group(function () {
+    Route::get('/', [LandingPageController::class, 'blog'])->name('blog');
+    Route::get('/{slug}', [LandingPageController::class, 'blogDetail'])->name('blog-detail');
+});
+
 //dashboard
 Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'dashboard'], function () {
