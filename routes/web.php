@@ -24,6 +24,13 @@ use Illuminate\Support\Facades\Route;
 */
 //landing page
 Route::get('/', [LandingPageController::class, 'index'])->name('index');
+Route::prefix('/blog')->group(function () {
+    Route::get('/', [LandingPageController::class, 'blog'])->name('blog');
+    Route::get('/{slug}', [LandingPageController::class, 'blogDetail'])->name('blog-detail');
+});
+
+// send mail
+Route::post('/send-mail', [LandingPageController::class, 'sendMail'])->name('send-mail');
 
 //auth routes
 Route::get('/login', function () {
@@ -36,10 +43,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])
         ->middleware('auth')
         ->name('logout');
-});
-Route::prefix('/blog')->group(function () {
-    Route::get('/', [LandingPageController::class, 'blog'])->name('blog');
-    Route::get('/{slug}', [LandingPageController::class, 'blogDetail'])->name('blog-detail');
 });
 
 //dashboard

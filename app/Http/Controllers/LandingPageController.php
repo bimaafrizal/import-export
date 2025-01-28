@@ -9,8 +9,11 @@ use App\Models\AboutUs;
 use App\Models\Blog;
 use App\Models\Contact;
 use App\Models\Image;
+use App\Models\Notification;
 use App\Models\Product;
 use App\Models\Team;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Intervention\Image\Laravel\Facades\Image as InterventionImage;
 
 class LandingPageController extends Controller
@@ -211,6 +214,41 @@ class LandingPageController extends Controller
             ]);
         } catch (\Throwable $th) {
             return redirect()->route('index');
+        }
+    }
+
+
+    public function sendMail(Request $request) {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'subject' => 'required',
+            'message' => 'required',
+        ]);
+
+        $contacts = Contact::where('landing_page_id', 1)->get();
+        $requiredContacts = $contacts->whereNotIn('type', ['social-media'])->keyBy('type');
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'subject' => $request->subject,
+            'message' => $request->message,
+        ];
+
+        try {
+            Mail::to($requiredContacts['email']->value)->send(new \App\Mail\ContactMail($data));
+
+            //save notification
+            Notification::create([
+                'title' => 'Pesan Baru',
+                'content' => 'Anda mendapat pesan baru dari ' . $request->name,
+                'type' => 'email',
+            ]);
+            return response()->json(['message' => 'Email berhasil dikirim'], 200);
+        } catch (\Exception $e) {
+            // \Log::error('Email Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Email gagal dikirim'], 500);
         }
     }
 

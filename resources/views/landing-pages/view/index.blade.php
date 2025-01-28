@@ -34,7 +34,78 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('.email-form');
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Processing...',
+                    text: 'Please wait while we send your email',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: data.message || 'Your email has been sent successfully!',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                        });
+                        form.reset();
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: data.message ||
+                                'Failed to send your email. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                        });
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Something went wrong. Please check your connection.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+        function showLoading() {
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Please wait while we send your email',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        }
+    </script>
 @endsection
+@section('after-style')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@endsection
+
 @section('content')
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
@@ -321,37 +392,28 @@
                 </div>
 
                 <div class="col-lg-8">
-                    <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up"
+                    <form action="{{ route('send-mail') }}" method="POST" class="email-form" data-aos="fade-up"
                         data-aos-delay="200">
+                        @csrf
                         <div class="row gy-4">
-
                             <div class="col-md-6">
                                 <input type="text" name="name" class="form-control" placeholder="Your Name"
-                                    required="">
+                                    required value="{{ old('name') }}">
                             </div>
-
-                            <div class="col-md-6 ">
-                                <input type="email" class="form-control" name="email" placeholder="Your Email"
-                                    required="">
+                            <div class="col-md-6">
+                                <input type="email" name="email" class="form-control" placeholder="Your Email"
+                                    required value="{{ old('email') }}">
                             </div>
-
                             <div class="col-md-12">
-                                <input type="text" class="form-control" name="subject" placeholder="Subject"
-                                    required="">
+                                <input type="text" name="subject" class="form-control" placeholder="Subject" required
+                                    value="{{ old('subject') }}">
                             </div>
-
                             <div class="col-md-12">
-                                <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+                                <textarea name="message" rows="6" class="form-control" placeholder="Message" required>{{ old('message') }}</textarea>
                             </div>
-
                             <div class="col-md-12 text-center">
-                                <div class="loading">Loading</div>
-                                <div class="error-message"></div>
-                                <div class="sent-message">Your message has been sent. Thank you!</div>
-
-                                <button type="submit">Send Message</button>
+                                <button type="submit" class="btn btn-primary">Send Message</button>
                             </div>
-
                         </div>
                     </form>
                 </div><!-- End Contact Form -->
