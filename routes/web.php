@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LandingPageSettingController;
@@ -48,9 +49,7 @@ Route::controller(AuthController::class)->group(function () {
 //dashboard
 Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'dashboard'], function () {
-        Route::get('/', function () {
-            return view('dashboard.views.index');
-        })->name('dashboard');
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::prefix('/manage-admin')->group(function () {
             Route::get('/', [MangaementAdminController::class, 'index'])->name('management-admin.index');
             Route::get('/create', [MangaementAdminController::class, 'create'])->name('management-admin.create');
