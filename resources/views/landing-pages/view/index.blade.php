@@ -211,7 +211,17 @@
                             <div class="col-md-8">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $blog->title }}</h5>
-                                    <p class="card-text">{{ $blog->blogCategory->name }} - {{ $blog->created_at }}</p>
+                                    <p class="card-text">
+                                    <ul>
+                                        <li class="d-flex align-items-center"><i class="bi bi-person me-2"></i> <a
+                                                href="#">{{ $blog->user->name }}</a></li>
+                                        <li class="d-flex align-items-center"><i class="bi bi-clock me-2"></i> <a
+                                                href="#"><time
+                                                    datetime="2021-01-01">{{ $blog->created_at }}</time></a></li>
+                                        <li class="d-flex align-items-center"><i class="bi bi-tag-fill me-2"></i> <a
+                                                href="#">{{ $blog->blogCategory->name }}</a></li>
+                                    </ul>
+                                    </p>
                                     <div class="read-more-container">
                                         <a href="{{ route('blog-detail', $blog->slug) }}" class="btn btn-primary">Read
                                             More</a>
@@ -222,9 +232,9 @@
                     </div>
                 @endforeach
                 @if ($blogCount > 3)
-                <div class="d-flex justify-content-center align-items-cente read-all">
-                    <a href="{{ route('blog-detail', $blog->slug) }}" class="btn btn-primary">Show All</a>
-                </div>
+                    <div class="d-flex justify-content-center align-items-cente read-all">
+                        <a href="{{ route('blog-detail', $blog->slug) }}" class="btn btn-primary">Show All</a>
+                    </div>
                 @endif
             </div>
         </div>

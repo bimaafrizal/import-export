@@ -180,6 +180,40 @@ class LandingPageController extends Controller
         }
     }
 
+
+    public function blog() {
+        try {
+            $blogs = Blog::with('blogCategory', 'user', 'image');
+            //search name blog, name category or user
+            if (request()->has('search')) {
+                $search = request()->search;
+                $blogs = $blogs->where('title', 'like', "%$search%")
+                    ->orWhereHas('blogCategory', function ($query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    })
+                    ->orWhereHas('user', function ($query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    });
+            }
+
+            $blogs = $blogs->orderBy('created_at', 'desc')->simplePaginate(6);
+            $landingPage = LandingPage::find(1);
+
+            $contacts = Contact::where('landing_page_id', 1)->get();
+            $socialMedias = $contacts->where('type', 'social-media');
+            $requiredContacts = $contacts->whereNotIn('type', ['social-media'])->keyBy('type');
+
+            return view('landing-pages.view.all-blog', [
+                'blogs' => $blogs,
+                'socialMedias' => $socialMedias,
+                'requiredContacts' => $requiredContacts,
+                'landingPage' => $landingPage,
+            ]);
+        } catch (\Throwable $th) {
+            return redirect()->route('index');
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */

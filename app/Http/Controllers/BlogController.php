@@ -22,9 +22,9 @@ class BlogController extends Controller
     public function index()
     {
         if (Auth::user()->role == 'admin') {
-            $blogs = Blog::with('blogCategory', 'user')->paginate(10);
+            $blogs = Blog::with('blogCategory', 'user')->orderBy('created_at', 'desc')->paginate(10);
         } else {
-            $blogs = Blog::with('blogCategory', 'user')->where('user_id', Auth::user()->id)->paginate(10);
+            $blogs = Blog::with('blogCategory', 'user')->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
         }
 
         return view('dashboard.views.blogs.index-blogs', compact('blogs'));
@@ -108,10 +108,10 @@ class BlogController extends Controller
             if (file_exists(public_path($image->path))) {
                 unlink(public_path($image->path));
             }
-            Image::where('path', $imageId)->delete();
+            Image::where('id', $imageId)->delete();
 
             //delete image from blog_images
-            BlogImage::where('image_id', $image->id)->delete();
+            BlogImage::where('image_id', $imageId)->delete();
 
             return response()->json(['success' => true, 'message' => 'File berhasil dihapus.']);
         } catch (\Throwable $th) {
@@ -235,9 +235,33 @@ class BlogController extends Controller
             }
 
             $uploadImage = null;
+            $imageId = [];
             if ($request->hasFile('image')) {
                 if (isset($request->crop_x) && isset($request->crop_y) && isset($request->crop_width) && isset($request->crop_height)) {
                     $uploadImage = $this->saveUploadImage($request->crop_x, $request->crop_y, $request->crop_width, $request->crop_height, $request->file('image'), $blog->image, 'blog', $request->title);
+                    array_push($imageId, $uploadImage['image_id']);
+                }
+            }
+
+            //chek image content
+            $imageContent = $this->handleContentImages($request->content);
+            if (!empty($imageContent)) {
+                $image = Image::whereIn('path', $imageContent)->get();
+                if (!empty($image)) {
+                    foreach ($image as $img) {
+                        $imageId[] = $img->id;
+                    }
+                }
+            }
+
+            foreach ($imageId as $id) {
+                //check image exist in blog_images
+                $blogImage = BlogImage::where('blog_id', $blog->id)->where('image_id', $id)->first();
+                if (!$blogImage) {
+                    BlogImage::create([
+                        'blog_id' => $blog->id,
+                        'image_id' => $id
+                    ]);
                 }
             }
 

@@ -3,12 +3,12 @@
 
 @section('content')
     <section id="blog" class="blog">
-        <div class="container" data-aos="fade-up">
+        <div class="container mt-5" data-aos="fade-up">
             <div class="row">
                 <div class="col-lg-12 entries">
                     <article class="entry entry-single">
 
-                        <h2 class="entry-title">
+                        <h2 class="entry-title d-flex justify-content-center">
                             <a>{{$blog->title}}</a>
                         </h2>
                         <div class="entry-img">
