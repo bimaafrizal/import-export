@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/edit/{id}', [MangaementAdminController::class, 'edit'])->name('management-admin.edit');
             Route::patch('/update/{id}', [MangaementAdminController::class, 'update'])->name('management-admin.update');
             Route::delete('/delete/{id}', [MangaementAdminController::class, 'destroy'])->name('management-admin.delete');
+            Route::patch('/update-status/{id}', [MangaementAdminController::class, 'updateStatus'])->name('management-admin.update-status');
         });
 
         Route::prefix('landing-page-settings')->group(function () {

@@ -46,7 +46,13 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone_number ?? '-' }}</td>
                                         <td>{{ $user->role->name }}</td>
-                                        <td>active</td>
+                                        <td>
+                                            @if ($user->active == 1)
+                                                <span class="badge bg-success">Active</span>
+                                            @else
+                                                <span class="badge bg-danger">Inactive</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-primary dropdown-toggle"
@@ -58,10 +64,27 @@
                                                             href="{{ route('management-admin.edit', $user->encrypted_id) }}">Edit</a>
                                                     </li>
 
-                                                    <li><a class="dropdown-item" data-bs-toggle="modal"
-                                                            data-bs-target="#deleteModal"
-                                                            data-user-id="{{ $user->encrypted_id }}">Delete</a>
-                                                    </li>
+                                                    @if ($user->role_id == 1)
+                                                        <li>
+                                                            <form
+                                                                method="POST"
+                                                                action="{{ route('management-admin.update-status', $user->encrypted_id) }}">
+                                                                @method('PATCH')
+                                                                @csrf
+                                                                @if ($user->active == 1)
+                                                                    <button type="submit"
+                                                                        class="dropdown-item">Inactive</button>
+                                                                @else
+                                                                    <button type="submit"
+                                                                        class="dropdown-item">Active</button>
+                                                                @endif
+                                                            </form>
+                                                        </li>
+                                                        <li><a class="dropdown-item" data-bs-toggle="modal"
+                                                                data-bs-target="#deleteModal"
+                                                                data-user-id="{{ $user->encrypted_id }}">Delete</a>
+                                                        </li>
+                                                    @endif
                                                 </ul>
                                             </div>
                                         </td>

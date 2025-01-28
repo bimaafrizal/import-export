@@ -17,6 +17,7 @@ class MangaementAdminController extends Controller
     public function index()
     {
         $users = User::with('role')->get();
+
         //add encrypt id
         $users->map(function ($user) {
             $user->encrypted_id = encrypt($user->id);
@@ -174,6 +175,25 @@ class MangaementAdminController extends Controller
             $user->delete();
 
             return redirect()->route('management-admin.index')->with('success', 'Admin berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect()->route('management-admin.index')->with('error', $e->getMessage());
+        }
+    }
+
+    public function updateStatus($id) {
+        try {
+            $id = decrypt($id);
+            $user = User::find($id);
+            if (!$user) {
+                throw new \Exception('User not found');
+            }
+            if ($user->role_id == 2) {
+                throw new \Exception('Super Admin tidak bisa diubah statusnya');
+            }
+            $user->active = !$user->active;
+            $user->save();
+
+            return redirect()->route('management-admin.index')->with('success', 'Status admin berhasil diubah');
         } catch (\Exception $e) {
             return redirect()->route('management-admin.index')->with('error', $e->getMessage());
         }

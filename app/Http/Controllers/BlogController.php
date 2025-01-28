@@ -21,10 +21,13 @@ class BlogController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role == 'admin') {
-            $blogs = Blog::with('blogCategory', 'user')->orderBy('created_at', 'desc')->paginate(10);
-        } else {
+        if (Auth::user()->role_id == 1) {
             $blogs = Blog::with('blogCategory', 'user')->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
+        } else {
+            //show only active user
+            $blogs = Blog::with('blogCategory', 'user')->whereHas('user', function ($query)  {
+                $query->where('active', 1);
+            })->orderBy('created_at', 'desc')->paginate(10);
         }
 
         return view('dashboard.views.blogs.index-blogs', compact('blogs'));

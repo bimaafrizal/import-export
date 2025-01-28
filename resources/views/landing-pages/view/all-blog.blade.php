@@ -19,7 +19,7 @@
             </section>
         </div>
 
-        <div class="container">
+        <div class="container mt-3">
             <div class="row gy-4">
                 @foreach ($blogs as $blog)
                     <div class="card card-blog mb-3">

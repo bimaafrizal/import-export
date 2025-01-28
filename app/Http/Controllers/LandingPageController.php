@@ -58,7 +58,9 @@ class LandingPageController extends Controller
         $imageIds = $imageIds->merge($teams->pluck('image_id'));
 
         //blog
-        $blogs = Blog::with('blogCategory');
+        $blogs = Blog::with('blogCategory', 'user')->whereHas('user', function ($query) {
+            $query->where('active', 1);
+        });
         $blogCount = $blogs->count();
         $blogs = $blogs->limit(3)->orderBy('created_at', 'desc')->get();
         $imageIds = $imageIds->merge($blogs->pluck('image_id'));
@@ -93,7 +95,7 @@ class LandingPageController extends Controller
                     $image = $images[$productImage->image_id];
                     $productImage->image = $image->path;
                     $productImage->description = nl2br(preg_replace('/\\r\\n|\\r|\\n/', "\r\n", $image->description));
-                    if($image->show_gallery == 1) {
+                    if ($image->show_gallery == 1) {
                         $galleries[] = [
                             'path' => $image->path,
                             'description' => $image->description ?: '-',
@@ -106,7 +108,7 @@ class LandingPageController extends Controller
         //tambahkan gambar blog pada gallery
         $blogImages = $images->filter(fn($image) => $image->type === 'blog');
         foreach ($blogImages as $blogImage) {
-            if($blogImage->show_gallery == 1) {
+            if ($blogImage->show_gallery == 1) {
                 $galleries[] = [
                     'path' => $blogImage->path,
                     'description' => $blogImage->description ?: '-',
@@ -133,7 +135,7 @@ class LandingPageController extends Controller
         // Tambahkan gambar galeri
         $galleryImages = $images->filter(fn($image) => $image->type === 'gallery');
         foreach ($galleryImages as $galleryImage) {
-            if($galleryImage->show_gallery == 1) {
+            if ($galleryImage->show_gallery == 1) {
                 $galleries[] = [
                     'path' => $galleryImage->path,
                     'description' => $galleryImage->description ?: '-',
@@ -162,7 +164,9 @@ class LandingPageController extends Controller
     public function blogDetail($slug)
     {
         try {
-            $blog = Blog::with('blogCategory', 'user')->where('slug', $slug)->firstOrFail();
+            $blog = Blog::with('blogCategory', 'user')->where('slug', $slug)->whereHas('user', function ($query) {
+                $query->where('active', 1);
+            })->firstOrFail();
             $image = Image::find($blog->image_id);
             $blog->image = $image->path;
             $blog->created_at = $blog->created_at->diffForHumans();
@@ -184,9 +188,12 @@ class LandingPageController extends Controller
     }
 
 
-    public function blog() {
+    public function blog()
+    {
         try {
-            $blogs = Blog::with('blogCategory', 'user', 'image');
+            $blogs = Blog::with('blogCategory', 'user', 'image')->whereHas('user', function ($query) {
+                $query->where('active', 1);
+            });
             //search name blog, name category or user
             if (request()->has('search')) {
                 $search = request()->search;
@@ -218,7 +225,8 @@ class LandingPageController extends Controller
     }
 
 
-    public function sendMail(Request $request) {
+    public function sendMail(Request $request)
+    {
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',

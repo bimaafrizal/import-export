@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -27,13 +28,19 @@ class AuthController extends Controller
             ]);
         }
 
+        //chek apakah user terdaftar
+        $user = User::where('email', $request->email)->first();
+        if (!empty($user)) {
+            if ($user->active == false) {
+                return redirect()->back()->with('error', 'Akun anda belum aktif');
+            }
+        }
+
         if (Auth::attempt($request->only('email', 'password'))) {
-            // dd('login success');
             RateLimiter::clear($key);
             $request->session()->regenerate();
             return redirect()->intended('/dashboard'); // Ganti 'dashboard' dengan route yang diinginkan
         }
-        // dd('login failed');
 
         RateLimiter::hit($key);
 
