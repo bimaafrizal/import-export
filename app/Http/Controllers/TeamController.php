@@ -17,7 +17,14 @@ class TeamController extends Controller
     public function index()
     {
         $teams = Team::with('image')->simplePaginate(10);
-        return view('dashboard.views.landing-page-setting.team.index-team', compact('teams'));
+        $page_name = 'Team';
+        $breadcrumbs = [
+            [
+                'value' => 'Team',
+                'url' => '',
+            ],
+        ];
+        return view('dashboard.views.landing-page-setting.team.index-team', compact('teams', 'page_name', 'breadcrumbs'));
     }
 
     /**
@@ -88,7 +95,19 @@ class TeamController extends Controller
                 throw new \Exception('Team not found');
             }
 
-            return view('dashboard.views.landing-page-setting.team.edit-team', compact('team'));
+            $page_name = 'Edit Team';
+            $breadcrumbs = [
+                [
+                    'value' => 'Team',
+                    'url' => 'landing-page-settings.team.index',
+                ],
+                [
+                    'value' => 'Edit Team',
+                    'url' => '',
+                ],
+            ];
+
+            return view('dashboard.views.landing-page-setting.team.edit-team', compact('team', 'page_name', 'breadcrumbs'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

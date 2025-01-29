@@ -20,7 +20,15 @@ class GalleryController extends Controller
             $image->description = preg_replace('/\\r\\n|\\r|\\n/', "\r\n", $image->description);
             $image->description = nl2br($image->description);
         }
-        return view('dashboard.views.landing-page-setting.gallery.index-gallery', compact('images'));
+
+        $page_name = 'Gallery';
+        $breadcrumbs = [
+            [
+                'value' => 'Gallery',
+                'url' => '',
+            ],
+        ];
+        return view('dashboard.views.landing-page-setting.gallery.index-gallery', compact('images', 'page_name', 'breadcrumbs'));
     }
 
     /**
@@ -82,7 +90,19 @@ class GalleryController extends Controller
                 throw new \Exception('Gambar tidak ditemukan');
             }
 
-            return view('dashboard.views.landing-page-setting.gallery.edit-gallery', compact('image'));
+            $page_name = 'Edit Gallery';
+            $breadcrumbs = [
+                [
+                    'value' => 'Gallery',
+                    'url' => 'landing-page-settings.gallery.index'
+                ],
+                [
+                    'value' => 'Edit Gallery',
+                    'url' => '',
+                ],
+            ];
+
+            return view('dashboard.views.landing-page-setting.gallery.edit-gallery', compact('image', 'page_name', 'breadcrumbs'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }

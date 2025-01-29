@@ -6,38 +6,37 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title>@yield('page-name')</title>
-        <meta content="" name="description">
-        <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta content="" name="keywords">
 
-        <!-- Favicons -->
-        @if (file_exists(public_path('/images/logo/logo.png')))
+    <!-- Favicons -->
+    @if (file_exists(public_path('/images/logo/logo.png')))
         <link href="{{ asset('/images/logo/logo.png') }}" rel="icon">
         <link href="{{ asset('/images/logo/logo.png') }}" rel="apple-touch-icon">
-
-        @else
+    @else
         <link href="{{ asset('dashboard-assets/img/favicon.png') }}" rel="icon">
         <link href="{{ asset('dashboard-assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
-        @endif
+    @endif
 
-        <!-- Google Fonts -->
-        <link href="https://fonts.gstatic.com" rel="preconnect">
-        <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-            rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
 
-        <!-- Vendor CSS Files -->
-        @yield('before-styles')
-        <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/bootstrap/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
-        <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/boxicons/css/boxicons.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/quill/quill.snow.css') }}">
-        <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/quill/quill.bubble.css') }}">
-        <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/remixicon/remixicon.css') }}">\
-        <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/simple-datatables/style.css') }}">
+    <!-- Vendor CSS Files -->
+    @yield('before-styles')
+    <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/boxicons/css/boxicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/quill/quill.snow.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/quill/quill.bubble.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/remixicon/remixicon.css') }}">\
+    <link rel="stylesheet" href="{{ asset('dashboard-assets/vendor/simple-datatables/style.css') }}">
 
-        <!-- Template Main CSS File -->
-        <link rel="stylesheet" href="{{ asset('dashboard-assets/css/style.css') }}">
-        @yield('after-styles')
+    <!-- Template Main CSS File -->
+    <link rel="stylesheet" href="{{ asset('dashboard-assets/css/style.css') }}">
+    @yield('after-styles')
 </head>
 
 <body>
@@ -49,13 +48,35 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Dashboard</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">Dashboard</li>
-                </ol>
-            </nav>
+            @if (!empty($page_name) && !empty($breadcrumbs))
+                <h1>{{ $page_name }}</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                        @foreach ($breadcrumbs as $key => $item)
+                            @if (count($breadcrumbs) == 1)
+                                <li class="breadcrumb-item active">{{ $item['value'] }}</li>
+                            @else
+                                @if ($key == count($breadcrumbs) - 1)
+                                    <li class="breadcrumb-item active">{{ $item['value'] }}</li>
+                                @else
+                                    <li class="breadcrumb-item"><a
+                                            href="{{ route($item['url']) }}">{{ $item['value'] }}</a>
+                                    </li>
+                                @endif
+                            @endif
+                        @endforeach
+                    </ol>
+                </nav>
+            @else
+                <h1>Dashboard</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                </nav>
+            @endif
         </div><!-- End Page Title -->
 
         @yield('content')

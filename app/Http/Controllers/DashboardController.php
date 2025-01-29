@@ -30,9 +30,15 @@ class DashboardController extends Controller
         ];
 
         $notifications = Notification::where('type', 'email')->orderBy('created_at', 'desc')->limit(10)->get();
+        $page_name = 'Dashboard';
+        $breadcrumbs = [
+            ['value' => 'Dashboard', 'url' => ''],
+        ];
         return view('dashboard.views.index', [
             'data' => $data,
             'notifications' => $notifications,
+            'page_name' => $page_name,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
 }

@@ -39,8 +39,15 @@ class ProductController extends Controller
             $product->count_image = count($product->images);
         }
 
-        // dd($products);
-        return view('dashboard.views.landing-page-setting.product.index-product', compact('products'));
+        $page_name = 'Product';
+        $breadcrumbs = [
+            [
+                'value' => 'Product',
+                'url' => '',
+            ],
+        ];
+
+        return view('dashboard.views.landing-page-setting.product.index-product', compact('products', 'page_name', 'breadcrumbs'));
     }
 
     /**
@@ -160,7 +167,19 @@ class ProductController extends Controller
                 }
             }
 
-            return view('dashboard.views.landing-page-setting.product.edit-product', compact('product', 'images'));
+            $page_name = 'Edit Product';
+            $breadcrumbs = [
+                [
+                    'value' => 'Product',
+                    'url' => 'landing-page-settings.product.index',
+                ],
+                [
+                    'value' => 'Edit Product',
+                    'url' => '',
+                ],
+            ];
+
+            return view('dashboard.views.landing-page-setting.product.edit-product', compact('product', 'images', 'page_name', 'breadcrumbs'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }

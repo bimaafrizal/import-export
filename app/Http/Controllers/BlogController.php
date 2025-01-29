@@ -30,7 +30,12 @@ class BlogController extends Controller
             })->orderBy('created_at', 'desc')->paginate(10);
         }
 
-        return view('dashboard.views.blogs.index-blogs', compact('blogs'));
+        $page_name = 'Blogs';
+        $breadcrumbs = [
+            ['value' => 'Blogs', 'url' => ''],
+        ];
+
+        return view('dashboard.views.blogs.index-blogs', compact('blogs', 'page_name', 'breadcrumbs'));
     }
 
     /**
@@ -39,7 +44,12 @@ class BlogController extends Controller
     public function create()
     {
         $blogCategories = BlogCategory::all();
-        return view('dashboard.views.blogs.create-edit-blogs', compact('blogCategories'));
+        $page_name = 'Create Blog';
+        $breadcrumbs = [
+            ['value' => 'Blogs', 'url' => 'blogs.index'],
+            ['value' => 'Create Blog', 'url' => ''],
+        ];
+        return view('dashboard.views.blogs.create-edit-blogs', compact('blogCategories', 'page_name', 'breadcrumbs'));
     }
 
     private function handleContentImages($content)
@@ -204,7 +214,12 @@ class BlogController extends Controller
                 return redirect()->back()->with('error', 'Blog not found');
             }
             $blogCategories = BlogCategory::all();
-            return view('dashboard.views.blogs.create-edit-blogs', compact('blog', 'blogCategories'));
+            $page_name = 'Edit Blog';
+            $breadcrumbs = [
+                ['value' => 'Blogs', 'url' => 'blogs.index'],
+                ['value' => 'Edit Blog', 'url' => ''],
+            ];
+            return view('dashboard.views.blogs.create-edit-blogs', compact('blog', 'blogCategories', 'page_name', 'breadcrumbs'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }

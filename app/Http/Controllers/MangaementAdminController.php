@@ -23,7 +23,11 @@ class MangaementAdminController extends Controller
             $user->encrypted_id = encrypt($user->id);
             return $user;
         });
-        return view('dashboard.views.management-admin.index-management-admin', compact('users'));
+        $page_name = 'Management Admin';
+        $breadcrumbs = [
+            ['value' => 'Management Admin', 'url' => ''],
+        ];
+        return view('dashboard.views.management-admin.index-management-admin', compact('users', 'page_name', 'breadcrumbs'));
     }
 
     /**
@@ -31,7 +35,12 @@ class MangaementAdminController extends Controller
      */
     public function create()
     {
-        return view('dashboard.views.management-admin.create-management-admin');
+        $page_name = 'Create Admin';
+        $breadcrumbs = [
+            ['value' => 'Management Admin', 'url' => 'management-admin.index'],
+            ['value' => 'Create Admin', 'url' => ''],
+        ];
+        return view('dashboard.views.management-admin.create-management-admin', compact('page_name', 'breadcrumbs'));
     }
 
     /**
@@ -97,7 +106,12 @@ class MangaementAdminController extends Controller
             if (!$user) {
                 throw new \Exception('User not found');
             }
-            return view('dashboard.views.management-admin.edit-management-admin', compact('user'));
+            $page_name = 'Edit Admin';
+            $breadcrumbs = [
+                ['value' => 'Management Admin', 'url' => 'management-admin.index'],
+                ['value' => 'Edit Admin', 'url' => ''],
+            ];
+            return view('dashboard.views.management-admin.edit-management-admin', compact('user', 'page_name', 'breadcrumbs'));
         } catch (\Exception $e) {
             return redirect()->route('management-admin.index')->with('error', $e->getMessage());
         }

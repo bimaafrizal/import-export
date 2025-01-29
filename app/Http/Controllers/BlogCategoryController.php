@@ -16,8 +16,12 @@ class BlogCategoryController extends Controller
     public function index()
     {
         $blogCategories = BlogCategory::paginate(10);
+        $page_name = 'Blog Categories';
+        $breadcrumbs = [
+            ['value' => 'Blog Categories', 'url' => ''],
+        ];
 
-        return view('dashboard.views.blog-categories.index-blog-categories', compact('blogCategories'));
+        return view('dashboard.views.blog-categories.index-blog-categories', compact('blogCategories', 'page_name', 'breadcrumbs'));
     }
 
     /**
@@ -65,7 +69,13 @@ class BlogCategoryController extends Controller
                 return redirect()->route('blog-categories.index')->with('error', 'Blog category not found');
             }
 
-            return view('dashboard.views.blog-categories.edit-blog-categories', compact('blogCategory'));
+            $page_name = 'Edit Blog Category';
+            $breadcrumbs = [
+                ['value' => 'Blog Categories', 'url' => 'blog-categories.index'],
+                ['value' => 'Edit Blog Category', 'url' => ''],
+            ];
+
+            return view('dashboard.views.blog-categories.edit-blog-categories', compact('blogCategory', 'page_name', 'breadcrumbs'));
         } catch (\Exception $e) {
             return redirect()->route('blog-categories.index')->with('error', $e->getMessage());
         }

@@ -19,7 +19,14 @@ class ContactController extends Controller
         foreach ($contacts as $contact) {
             $contact->status_delete = $contact->type == "social-media" ? true : false;
         }
-        return view('dashboard.views.landing-page-setting.contact.index-contact', compact('contacts'));
+        $page_name = 'Contact';
+        $breadcrumbs = [
+            [
+                'value' => 'Contact',
+                'url' => '',
+            ],
+        ];
+        return view('dashboard.views.landing-page-setting.contact.index-contact', compact('contacts', 'page_name', 'breadcrumbs'));
     }
 
     /**
@@ -81,7 +88,19 @@ class ContactController extends Controller
             if (!$contact) {
                 return redirect()->back()->with('error', 'Contact not found');
             }
-            return view('dashboard.views.landing-page-setting.contact.edit-contact', compact('contact'));
+
+            $page_name = 'Edit Contact';
+            $breadcrumbs = [
+                [
+                    'value' => 'Contact',
+                    'url' => 'landing-page-settings.contact.index',
+                ],
+                [
+                    'value' => 'Edit Contact',
+                    'url' => '',
+                ],
+            ];
+            return view('dashboard.views.landing-page-setting.contact.edit-contact', compact('contact', 'page_name', 'breadcrumbs'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }

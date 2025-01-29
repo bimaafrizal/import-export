@@ -13,7 +13,11 @@ class LandingPageSettingController extends Controller
     public function index()
     {
         $landingPageSetting = LandingPage::where('id', 1)->first();
-        return view('dashboard.views.landing-page-setting.index-landing-page-setting', compact('landingPageSetting'));
+        $page_name = 'Home Setting';
+        $breadcrumbs = [
+            ['value' => 'Home Setting', 'url' => ''],
+        ];
+        return view('dashboard.views.landing-page-setting.index-landing-page-setting', compact('landingPageSetting', 'page_name', 'breadcrumbs'));
     }
 
     public function updateHome(Request $request)
@@ -75,7 +79,11 @@ class LandingPageSettingController extends Controller
     public function aboutUs()
     {
         $aboutUs = AboutUs::where('id', 1)->first();
-        return view('dashboard.views.landing-page-setting.about_us-landing-page-setting', compact('aboutUs'));
+        $page_name = 'About Us Setting';
+        $breadcrumbs = [
+            ['value' => 'About Us Setting', 'url' => ''],
+        ];
+        return view('dashboard.views.landing-page-setting.about_us-landing-page-setting', compact('aboutUs', 'page_name', 'breadcrumbs'));
     }
 
     public function updateAboutUs(Request $request) {
