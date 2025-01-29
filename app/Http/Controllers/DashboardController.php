@@ -14,7 +14,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        if (auth()->user()->role->name == 'admin') {
+        if (auth()->user()->role_id == 1) {
             $blog = Blog::where('user_id', auth()->id())->count();
         } else {
             $blog = Blog::with('user')->whereHas('user', function ($query) {

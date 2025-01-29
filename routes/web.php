@@ -50,14 +50,26 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-        Route::prefix('/manage-admin')->group(function () {
-            Route::get('/', [MangaementAdminController::class, 'index'])->name('management-admin.index');
-            Route::get('/create', [MangaementAdminController::class, 'create'])->name('management-admin.create');
-            Route::post('/store', [MangaementAdminController::class, 'store'])->name('management-admin.store');
-            Route::get('/edit/{id}', [MangaementAdminController::class, 'edit'])->name('management-admin.edit');
-            Route::patch('/update/{id}', [MangaementAdminController::class, 'update'])->name('management-admin.update');
-            Route::delete('/delete/{id}', [MangaementAdminController::class, 'destroy'])->name('management-admin.delete');
-            Route::patch('/update-status/{id}', [MangaementAdminController::class, 'updateStatus'])->name('management-admin.update-status');
+
+        Route::middleware('super-admin')->group(function () {
+            Route::prefix('/manage-admin')->group(function () {
+                Route::get('/', [MangaementAdminController::class, 'index'])->name('management-admin.index');
+                Route::get('/create', [MangaementAdminController::class, 'create'])->name('management-admin.create');
+                Route::post('/store', [MangaementAdminController::class, 'store'])->name('management-admin.store');
+                Route::get('/edit/{id}', [MangaementAdminController::class, 'edit'])->name('management-admin.edit');
+                Route::patch('/update/{id}', [MangaementAdminController::class, 'update'])->name('management-admin.update');
+                Route::delete('/delete/{id}', [MangaementAdminController::class, 'destroy'])->name('management-admin.delete');
+                Route::patch('/update-status/{id}', [MangaementAdminController::class, 'updateStatus'])->name('management-admin.update-status');
+            });
+
+            //blog categories
+            Route::prefix('blog-categories')->group(function () {
+                Route::get('/', [BlogCategoryController::class, 'index'])->name('blog-categories.index');
+                Route::post('/store', [BlogCategoryController::class, 'store'])->name('blog-categories.store');
+                Route::get('/edit/{id}', [BlogCategoryController::class, 'edit'])->name('blog-categories.edit');
+                Route::patch('/update/{id}', [BlogCategoryController::class, 'update'])->name('blog-categories.update');
+                Route::delete('/delete/{id}', [BlogCategoryController::class, 'destroy'])->name('blog-categories.delete');
+            });
         });
 
         Route::prefix('landing-page-settings')->group(function () {
@@ -94,15 +106,6 @@ Route::middleware('auth')->group(function () {
             Route::patch('/gallery/update/{id}', [GalleryController::class, 'update'])->name('landing-page-settings.gallery.update');
             Route::patch('/gallery/update-status/{id}', [GalleryController::class, 'updateStatus'])->name('landing-page-settings.gallery.update-status');
             Route::delete('/gallery/delete/{id}', [GalleryController::class, 'destroy'])->name('landing-page-settings.gallery.delete');
-        });
-
-        //blog categories
-        Route::prefix('blog-categories')->group(function () {
-            Route::get('/', [BlogCategoryController::class, 'index'])->name('blog-categories.index');
-            Route::post('/store', [BlogCategoryController::class, 'store'])->name('blog-categories.store');
-            Route::get('/edit/{id}', [BlogCategoryController::class, 'edit'])->name('blog-categories.edit');
-            Route::patch('/update/{id}', [BlogCategoryController::class, 'update'])->name('blog-categories.update');
-            Route::delete('/delete/{id}', [BlogCategoryController::class, 'destroy'])->name('blog-categories.delete');
         });
 
         //blogs

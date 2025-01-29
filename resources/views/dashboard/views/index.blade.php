@@ -34,24 +34,26 @@
                     </div><!-- End Sales Card -->
 
                     <!-- Revenue Card -->
-                    <div class="col-xxl-4 col-md-6">
-                        <div class="card info-card revenue-card">
+                    @can('super-admin')
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card revenue-card">
 
-                            <div class="card-body">
-                                <h5 class="card-title">Blog Category</h5>
+                                <div class="card-body">
+                                    <h5 class="card-title">Blog Category</h5>
 
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-tag"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>{{ $data['blog_category'] }}</h6>
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-tag"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6>{{ $data['blog_category'] }}</h6>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                        </div>
-                    </div><!-- End Revenue Card -->
+                            </div>
+                        </div><!-- End Revenue Card -->
+                    @endcan
 
                     <!-- Customers Card -->
                     <div class="col-xxl-4 col-md-6">
@@ -130,8 +132,8 @@
                         <div class="news">
                             @foreach ($notifications as $item)
                                 <div class="post-item clearfix">
-                                    <h4><a href="#">{{$item->title}}</a></h4>
-                                    <p>{{$item->content}}</p>
+                                    <h4><a href="#">{{ $item->title }}</a></h4>
+                                    <p>{{ $item->content }}</p>
                                 </div>
                                 <hr>
                             @endforeach
