@@ -24,7 +24,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./              # Upload seluruh folder project
-          server-dir: /laravel-app   # Ganti dengan path folder program di server
+          server-dir: /laravel-app/  # Pastikan diakhiri dengan slash (/)
           exclude: |
             public/*                 # Jangan upload folder public
             .env                     # Jangan upload file .env
@@ -36,8 +36,8 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./public/        # Upload hanya folder public
-          server-dir: /public_html/   # Ganti dengan path folder public di server
+          local-dir: ./public        # Upload hanya folder public
+          server-dir: /public_html/  # Pastikan diakhiri dengan slash (/)
 
       # Buat file .env dari GitHub Secrets dan upload ke server
       - name: Create and upload .env file
