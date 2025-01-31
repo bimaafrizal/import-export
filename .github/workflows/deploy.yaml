@@ -16,9 +16,9 @@ jobs:
         run: |
           composer install --optimize-autoloader --no-dev
 
-      # Upload source code (kecuali folder public) ke laravel-app
+      # Upload source code (kecuali folder public dan .env) ke laravel-app
       - name: Upload source code to laravel-app folder
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
@@ -31,7 +31,7 @@ jobs:
 
       # Upload folder public ke public_html
       - name: Upload public files to public_html folder
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
@@ -39,12 +39,8 @@ jobs:
           local-dir: ./public        # Upload hanya folder public
           server-dir: /public_html   # Ganti dengan path folder public di server
 
-      # Upload file .env ke laravel-app
-      - name: Upload .env file
-        uses: SamKirkland/FTP-Deploy-Action@v4
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: .env            # Upload file .env
-          server-dir: /laravel-app   # Ganti dengan path folder program di server
+      # Buat file .env dari GitHub Secrets dan upload ke server
+      - name: Create and upload .env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+          curl -T .env ftp://${{ secrets.FTP_SERVER }}/laravel-app/.env --user "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}"
